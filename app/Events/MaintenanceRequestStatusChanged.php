@@ -46,13 +46,15 @@ class MaintenanceRequestStatusChanged implements ShouldBroadcast
     {
         return [
             'maintenance_request_id' => $this->maintenanceRequest->id,
-            'name' => $this->maintenanceRequest->name,
+            'name' => $this->maintenanceRequest->name?$this->maintenanceRequest->name:'Status Changed of Request',
             'request_date' => $this->maintenanceRequest->request_date,
             'type' => $this->maintenanceRequest->type,
             'status' => $this->maintenanceRequest->status,
             'equipment_id' => $this->maintenanceRequest->equipment_id,
             'signed_to_id' => $this->maintenanceRequest->signed_to_id,
             'requester_id' => $this->maintenanceRequest->requester_id,
+            'url'=>route('admin.maintenance-requests.show',$this->maintenanceRequest->id)
+
         ];
     }
   

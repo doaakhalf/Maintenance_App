@@ -47,7 +47,9 @@ class MaintenancePerformCreated implements ShouldBroadcast
             'status' => $this->maintenancePerform->status,
             'technician_id' => $this->maintenancePerform->technician_id,
             'requester_id' => $this->maintenancePerform->requester_id,
-            'name'=>'New Maintenance Perform'
+            'name'=>'New Maintenance Perform',
+            'url'=>route('admin.maintenance-perform.show',$this->maintenancePerform->id)
+
         ];
     }
   

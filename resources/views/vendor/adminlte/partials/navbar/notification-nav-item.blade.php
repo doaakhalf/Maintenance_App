@@ -6,10 +6,11 @@
 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="notifications">
    <div class="dropdown-item dropdown-header"><span  id="notifications-counter">{{$notificationCount}}</span><span> Notifications</span></div> 
     <div class="dropdown-divider"></div>
-   
+  
     @foreach(Auth::user()->unreadNotifications()->get() as $notification)
-        <a href="#" style="overflow: auto;" class="dropdown-item">
         
+        <a href="{{$notification->data['url']}}" style="overflow: auto;" class="dropdown-item">
+       
         <i class="fas fa-envelope mr-2"></i>  {{isset($notification->data['name'])? $notification->data['name'] :$notification->data['title']}}
         <span class="float-right text-muted text-sm">{{ $notification->created_at->diffForHumans()}}</span>
         </a>

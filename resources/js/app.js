@@ -5,10 +5,13 @@ import './bootstrap';
 window.Echo.channel('maintenance-request.' + userId)
     .listen('.MaintenanceRequestCreated', (data) => {
         console.log(data,typeof(data));
-       
+
+      
         const notifications = document.getElementById('notifications');
         const notification = document.createElement('a');
         notification.classList.add('dropdown-item')
+        notification.href=data.url
+        console.log(notification.getAttribute("href"));
       notification.innerHTML=` <i class="fas fa-envelope mr-2"></i> `+data.name +`
       <span class="float-right text-muted text-sm">3 mins</span>`
         // notifications.appendChild(notification);
@@ -26,7 +29,9 @@ window.Echo.channel('maintenance-request.' + userId)
        
         const notifications = document.getElementById('notifications');
         const notification = document.createElement('a');
+        notification.href=data.url
         notification.classList.add('dropdown-item')
+
       notification.innerHTML=` <i class="fas fa-envelope mr-2"></i> `+data.name +`
       <span class="float-right text-muted text-sm">3 mins</span>`
         // notifications.appendChild(notification);
@@ -45,7 +50,10 @@ window.Echo.channel('maintenance-request.' + userId)
        
         const notifications = document.getElementById('notifications');
         const notification = document.createElement('a');
+        notification.href=data.url
         notification.classList.add('dropdown-item')
+        console.log(notification.getAttribute("href"));
+
       notification.innerHTML=` <i class="fas fa-envelope mr-2"></i> `+data.name +`
       <span class="float-right text-muted text-sm">3 mins</span>`
         // notifications.appendChild(notification);

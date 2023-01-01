@@ -21,11 +21,11 @@
                     <p ><strong>Image:</strong></p>
                 @if ($equipment->image)
                 
-                    <img class="image-show" src="{{ Storage::url($equipment->image) }}" alt="{{ $equipment->name }}" class="img-fluid">
+                    <img class="image-show" src="{{  URL::to('/').'/'.$equipment->image }}" alt="{{ $equipment->name }}" class="img-fluid">
                
                 @else
                
-                    <img class="image-show" src="{{ Storage::url('images/equipments/default.png') }}" alt="{{ $equipment->name }}" class="img-fluid">
+                    <img class="image-show" src="{{ URL::to('/').'/images/equipments/default.png'}}" alt="{{ $equipment->name }}" class="img-fluid">
                 
                 @endif
                 </div>

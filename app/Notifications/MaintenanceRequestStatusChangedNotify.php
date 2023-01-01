@@ -64,6 +64,7 @@ class MaintenanceRequestStatusChangedNotify extends Notification implements Shou
             'request_date' => $this->maintenanceRequest->request_date,
             'equipment_id' => $this->maintenanceRequest->equipment_id,
             'title' =>'Status Of Maintenance Request Number '. $this->maintenanceRequest->id. 'is changed to '.$this->maintenanceRequest->status,
+            'url'=>route('admin.maintenance-requests.show',$this->maintenanceRequest->id)
 
 
         ];
@@ -72,11 +73,11 @@ class MaintenanceRequestStatusChangedNotify extends Notification implements Shou
     {
         return new BroadcastMessage([
             'maintenance_request_id' => $this->maintenanceRequest->id,
-            'name' => $this->maintenanceRequest->name,
+            'name' => $this->maintenanceRequest->name?$this->maintenanceRequest->name:'Status Changed of Request',
             'request_date' => $this->maintenanceRequest->request_date,
             'equipment_id' => $this->maintenanceRequest->equipment_id,
-            'title' =>'Status Of Maintenance Request Number '. $this->maintenanceRequest->id. 'is changed to '.$this->maintenanceRequest->status,
-
+            'title' => $this->maintenanceRequest->name?$this->maintenanceRequest->name:'Status Changed of Request',
+            'url'=>route('admin.maintenance-requests.show',$this->maintenanceRequest->id)
 
 
         ]);

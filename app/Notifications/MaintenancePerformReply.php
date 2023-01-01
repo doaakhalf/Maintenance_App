@@ -64,6 +64,8 @@ class MaintenancePerformReply extends Notification implements ShouldQueue
             'maintenance_request_id' => $this->maintenancePerform->maintenance_request_id,
             'perform_date' => $this->maintenancePerform->perform_date,
             'title' =>'New Maintenance Perform',
+            'url'=>route('admin.maintenance-perform.show',$this->maintenancePerform->id)
+
 
         ];
     }
@@ -74,6 +76,8 @@ class MaintenancePerformReply extends Notification implements ShouldQueue
             'maintenance_request_id' => $this->maintenancePerform->maintenance_request_id,
             'perform_date' => $this->maintenancePerform->perform_date,
             'title' =>'New Maintenance Perform',
+            'url'=>route('admin.maintenance-perform.show',$this->maintenancePerform->id)
+
 
         ]);
     }

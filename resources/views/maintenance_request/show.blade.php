@@ -39,11 +39,11 @@
                     <p ><strong>Image:</strong></p>
                 @if ($maintenance_request->equipment->image)
                 
-                    <img class="image-show" src="{{ Storage::url($maintenance_request->equipment->image) }}" alt="{{ $maintenance_request->equipment->name }}" class="img-fluid">
+                    <img class="image-show" src="{{  URL::to('/').'/'.$maintenance_request->equipment->image }}" alt="{{ $maintenance_request->equipment->name }}" class="img-fluid">
                
                 @else
                
-                    <img class="image-show" src="{{ Storage::url('images/equipments/default.png') }}" alt="{{ $maintenance_request->equipment->name }}" class="img-fluid">
+                    <img class="image-show" src="{{ URL::to('/').'/images/equipments/default.png' }}" alt="{{ $maintenance_request->equipment->name }}" class="img-fluid">
                 
                 @endif
                 </div>

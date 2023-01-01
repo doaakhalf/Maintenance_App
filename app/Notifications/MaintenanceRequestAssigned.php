@@ -60,10 +60,12 @@ class MaintenanceRequestAssigned extends Notification implements ShouldQueue
     {
         return [
             'maintenance_request_id' => $this->maintenanceRequest->id,
-            'name' => $this->maintenanceRequest->name,
+            'name' => $this->maintenanceRequest->name?$this->maintenanceRequest->name:'New Maintenance Request',
             'request_date' => $this->maintenanceRequest->request_date,
             'equipment_id' => $this->maintenanceRequest->equipment_id,
-            'title' =>'New Maintenance Request',
+            'title' => $this->maintenanceRequest->name?$this->maintenanceRequest->name:'New Maintenance Request',
+            'url'=>route('admin.maintenance-requests.show',$this->maintenanceRequest->id)
+
 
 
         ];
@@ -72,10 +74,11 @@ class MaintenanceRequestAssigned extends Notification implements ShouldQueue
     {
         return new BroadcastMessage([
             'maintenance_request_id' => $this->maintenanceRequest->id,
-            'name' => $this->maintenanceRequest->name,
+            'name' =>  $this->maintenanceRequest->name?$this->maintenanceRequest->name:'New Maintenance Request',
             'request_date' => $this->maintenanceRequest->request_date,
             'equipment_id' => $this->maintenanceRequest->equipment_id,
-            'title' =>'New Maintenance Request',
+            'title' => $this->maintenanceRequest->name?$this->maintenanceRequest->name:'New Maintenance Request',
+            'url'=>route('admin.maintenance-requests.show',$this->maintenanceRequest->id)
 
 
         ]);
