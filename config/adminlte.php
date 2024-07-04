@@ -14,10 +14,15 @@ return [
     |
     */
 
-    'title' => 'AdminLTE 3',
+    // 'title' => 'AdminLTE 3',
+    'title' => 'Maintenance App',
+
     'title_prefix' => '',
     'title_postfix' => '',
 
+    'variables' => [
+        'new_departments_count' => isset($newDepartmentsCount) ? $newDepartmentsCount : 0,
+    ],
     /*
     |--------------------------------------------------------------------------
     | Favicon
@@ -292,7 +297,7 @@ return [
     | https://github.com/jeroennoten/Laravel-AdminLTE/wiki/Menu-Configuration
     |
     */
-
+   
     'menu' => [
         // Navbar items:
         [
@@ -316,10 +321,10 @@ return [
             'can' => 'manage-blog',
         ],
         [
-            'text' => 'Departements',
-            'url' => 'admin/departements',
+            'text' => 'Departments',
+            'url' => 'admin/departments',
             'icon' => 'far fa-fw fa-file',
-            'label' => 4,
+            'label' =>1,
             'label_color' => 'success',
         ],
         ['header' => 'account_settings'],
@@ -331,6 +336,17 @@ return [
         [
             'text' => 'change_password',
             'url' => 'admin/settings',
+            'icon' => 'fas fa-fw fa-lock',
+        ],
+        ['header' => 'Users Control'],
+        [
+            'text' => 'users',
+            'url' => 'admin/users',
+            'icon' => 'fas fa-fw fa-users',
+        ],
+        [
+            'text' => 'roles',
+            'url' => 'admin/roles',
             'icon' => 'fas fa-fw fa-lock',
         ],
         [
@@ -371,27 +387,27 @@ return [
                 ],
             ],
         ],
-        ['header' => 'labels'],
-        [
-            'text' => 'important',
-            'icon_color' => 'red',
-            'url' => '#',
-        ],
-        [
-            'text' => 'warning',
-            'icon_color' => 'yellow',
-            'url' => '#',
-        ],
-        [
-            'text' => 'information',
-            'icon_color' => 'cyan',
-            'url' => '#',
-        ],
-        [
-            'text' => 'Logout',
-            'url' => 'auth/logout',
+        // ['header' => 'labels'],
+        // [
+        //     'text' => 'important',
+        //     'icon_color' => 'red',
+        //     'url' => '#',
+        // ],
+        // [
+        //     'text' => 'warning',
+        //     'icon_color' => 'yellow',
+        //     'url' => '#',
+        // ],
+        // [
+        //     'text' => 'information',
+        //     'icon_color' => 'cyan',
+        //     'url' => '#',
+        // ],
+        // [
+        //     'text' => 'Logout',
+        //     'url' => 'auth/logout',
            
-        ],
+        // ],
     ],
 
     /*

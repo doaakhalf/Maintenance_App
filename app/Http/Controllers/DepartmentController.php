@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DepartmentRequest;
 use Illuminate\Http\Request;
 use App\Models\Department;
-
-
+use Illuminate\Support\Facades\Log;
 
 class DepartmentController extends Controller
 {
@@ -29,6 +29,8 @@ class DepartmentController extends Controller
     public function create()
     {
         //
+        return view('departements.create');
+
     }
 
     /**
@@ -40,12 +42,18 @@ class DepartmentController extends Controller
     public function store(DepartmentRequest $request)
     {
         //
-        $departement=new Departement();
-        $departement->name=$request->name;
-        $departement->number=$request->number;
-        $departement->location=$request->location;
-        $departement->save();
-        return redirect()->route('admin.departments.index')->with('success', 'Department created successfully');
+        try{
+            $departement=new Department();
+            $departement->name=$request->name;
+            $departement->number=$request->number;
+            $departement->location=$request->location;
+            $departement->save();
+            return redirect()->route('admin.departments.index')->with('success', 'Department created successfully');
+
+    } catch (\Exception $e) {
+        Log::error('Error creating department: ' . $e->getMessage());
+        return redirect()->back()->with('error', 'An error occurred while creating the department')->withInput();
+    }
 
 
     }
@@ -69,6 +77,14 @@ class DepartmentController extends Controller
      */
     public function edit($id)
     {
+        $department = Department::find($id);
+        if (!$department) {
+            return redirect()->route('admin.departments.index')->with('error', 'Department not found');
+        }
+       
+        return view('departements.edit',compact('department'));
+
+
         //
     }
 
@@ -79,11 +95,28 @@ class DepartmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(DepartmentRequest $request, $id)
     {
         //
-    }
 
+        try{
+            $department=Department::find($id);
+            if (!$department) {
+                return redirect()->route('admin.departments.index')->with('error', 'Department not found');
+            }
+            $department->name=$request->name;
+            $department->number=$request->number;
+            $department->location=$request->location;
+            $department->save();
+            return redirect()->route('admin.departments.index')->with('success', 'Department Updated successfully');
+        } catch (\Exception $e) {
+            Log::error('Error updating department: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'An error occurred while updating the department')->withInput();
+        }
+    }
+       
+     
+   
     /**
      * Remove the specified resource from storage.
      *
@@ -92,6 +125,21 @@ class DepartmentController extends Controller
      */
     public function destroy($id)
     {
+
+        try {
+            $department = Department::find($id);
+            if (!$department) {
+                return redirect()->route('admin.departments.index')->with('error', 'Department not found');
+            }
+
+            $department->delete();
+            return redirect()->route('admin.departments.index')->with('success', 'Department deleted successfully');
+        } catch (\Exception $e) {
+            Log::error('Error deleting department: ' . $e->getMessage());
+            return redirect()->route('admin.departments.index')->with('error', 'An error occurred while deleting the department');
+        }
+        
+        
         //
     }
 }
