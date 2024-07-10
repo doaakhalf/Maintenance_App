@@ -41,9 +41,9 @@
                 @foreach ($departments as $department)
                     <tr>
                         <td>{{ $department->id }}</td>
-                        <td>{{ $department->name }}</td>
+                        <td>{{ $department->name?$department->name: "-" }}</td>
                         <td>{{ $department->number }}</td>
-                        <td>{{ $department->location }}</td>
+                        <td>{{ $department->location ? $department->location : "-" }}</td>
 
                         <td>
                             <!-- <a href="{{ route('admin.departments.show', $department->id) }}" class="btn btn-primary btn-sm">View</a> -->
@@ -94,15 +94,13 @@
 @stop
 @section('css')
     <!-- DataTables CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+ 
 @endsection
 @section('js')
-   <!-- jQuery -->
-   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-<!-- DataTables JS -->
-<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+  
+    <!-- Include DataTables JS -->
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 
     <script>
        

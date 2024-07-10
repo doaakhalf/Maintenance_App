@@ -38,7 +38,7 @@
             @endif
         </div>
           <div class="form-group col-md-6">
-            <label for="email">Email</label>
+            <label for="email">Email  <span class="text-danger">*</span></label>
             <input type="email" name="email" class="form-control" id="email" value="{{$user->email}}" placeholder="Enter Email">
             @if($errors->has('email'))
              <span class="invalid-feedback d-block"  role="alert"><strong>{{ $errors->first('email') }}</strong></span>
@@ -50,7 +50,7 @@
 
         
           <div class="form-group col-md-12">
-          <label for="role_id">User Role</label>
+          <label for="role_id">User Role  <span class="text-danger">*</span></label>
                     <select name="role_id" id="role_id" class="form-control" required>
                       @foreach ($roles as $role)
                         <option value="{{$role->id}}" {{ $user->role_id == $role->id ? 'selected' : '' }}>{{$role->role_name}}</option>

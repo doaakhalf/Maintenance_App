@@ -1,4 +1,7 @@
 {
     "/js/app.js": "/js/app.js",
-    "/css/app.css": "/css/app.css"
+    "/css/app.css": "/css/app.css",
+    "/css/style.css": "/css/style.css",
+    "/img/equipment-bg.jpg":"/img/equipment-bg.jpg"
+
 }

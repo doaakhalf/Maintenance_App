@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\EquipmentController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -16,21 +18,11 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::prefix('admin')->group(function () {
+Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::get('/home', function () {
         return view('dashboard');
-    })->middleware('auth');;
-
-    Route::resource('/departments', DepartmentController::class)->names([
-        'index' => 'admin.departments.index',
-        'create' => 'admin.departments.create',
-        'store' => 'admin.departments.store',
-        'show' => 'admin.departments.show',
-        'edit' => 'admin.departments.edit',
-        'update' => 'admin.departments.update',
-        'destroy' => 'admin.departments.destroy',
-    ]);
+    });
     Route::resource('/users', UserController::class)->names([
         'index' => 'admin.users.index',
         'create' => 'admin.users.create',
@@ -48,7 +40,42 @@ Route::prefix('admin')->group(function () {
         'edit' => 'admin.roles.edit',
         'update' => 'admin.roles.update',
         'destroy' => 'admin.roles.destroy',
-    ]);;
+        
+    ]);
+    Route::get('/roles/{role}/permissions', [App\Http\Controllers\RoleController::class, 'permissions'])->name('admin.roles.permissions');
+    Route::delete('admin/roles/{role}/permissions/{permission}', [RoleController::class, 'destroy_role_permissions'])->name('admin.roles.permissions.destroy');
+    Route::resource('/permissions', PermissionController::class)->names([
+        'index' => 'admin.permissions.index',
+        'create' => 'admin.permissions.create',
+        'store' => 'admin.permissions.store',
+        'show' => 'admin.permissions.show',
+        'edit' => 'admin.permissions.edit',
+        'update' => 'admin.permissions.update',
+        'destroy' => 'admin.permissions.destroy',
+        
+    ]);
+    // Departments
+    Route::resource('/departments', DepartmentController::class)->names([
+        'index' => 'admin.departments.index',
+        'create' => 'admin.departments.create',
+        'store' => 'admin.departments.store',
+        'show' => 'admin.departments.show',
+        'edit' => 'admin.departments.edit',
+        'update' => 'admin.departments.update',
+        'destroy' => 'admin.departments.destroy',
+    ]);
+
+      // Equipment
+      Route::resource('/equipment', EquipmentController::class)->names([
+        'index' => 'admin.equipment.index',
+        'create' => 'admin.equipment.create',
+        'store' => 'admin.equipment.store',
+        'show' => 'admin.equipment.show',
+        'edit' => 'admin.equipment.edit',
+        'update' => 'admin.equipment.update',
+        'destroy' => 'admin.equipment.destroy',
+    ]);
+    
 })->middleware('auth');
 
 Auth::routes(); 

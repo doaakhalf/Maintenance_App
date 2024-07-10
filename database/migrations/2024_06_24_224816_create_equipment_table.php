@@ -24,7 +24,7 @@ return new class extends Migration
             $table->integer('ppm')->nullable()
             ->comment('duration of maintenance each quarter 3,6,9');;
             $table->boolean('need_calibration')->nullable();
-            $table->Text('calibration_cycle')->nullable();
+            $table->string('calibration_cycle')->nullable();
             $table->foreignId('department_id')->constrained('departments');
      
             $table->timestamps();

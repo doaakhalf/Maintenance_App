@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RoleRequest;
+use App\Models\Permission;
+use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class RoleController extends Controller
 {
@@ -13,8 +17,10 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
+        $roles = Role::all();
+        return view('roles.index',compact('roles'));
     }
+    
 
     /**
      * Show the form for creating a new resource.
@@ -23,7 +29,9 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        $permissions=Permission::all();
+        return view('roles.create',compact('permissions'));
+        
     }
 
     /**
@@ -32,10 +40,37 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RoleRequest $request)
     {
-        //
+        try{
+            $role = Role::create(['role_name' => $request->role_name]);
+            $role->permissions()->sync($request->permissions);
+            return redirect()->route('admin.roles.index')->with('success', 'Role created successfully.');
+
+        } catch (\Exception $e) {
+            Log::error('Error creating role: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'An error occurred while creating the role')->withInput();
+        }
     }
+
+
+    /**
+     * Display the role permission.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function permissions($role_id)
+    {
+        $role=Role::find($role_id);
+        if(!$role){
+            return redirect()->route('admin.roles.index')->with('error', 'Role not found');
+        }
+        $permissions=Permission::all();
+        
+        return view('roles.permissions',compact('permissions','role'));
+    }
+
 
     /**
      * Display the specified resource.
@@ -47,7 +82,8 @@ class RoleController extends Controller
     {
         //
     }
-
+    
+   
     /**
      * Show the form for editing the specified resource.
      *
@@ -56,7 +92,15 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
-        //
+        
+            $role=Role::find($id);
+            if(!$role){
+                return redirect()->route('admin.roles.index')->with('error', 'Role not found');
+            }
+            $permissions=Permission::all();
+            
+            return view('roles.edit',compact('permissions','role'));
+        
     }
 
     /**
@@ -66,9 +110,23 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(RoleRequest $request, $id)
     {
-        //
+       
+        try{
+            $role=Role::find($id);
+            if (!$role) {
+                return redirect()->route('admin.roles.index')->with('error', 'role not found');
+            }
+            $role->update(['role_name' => $request->role_name]);
+            $role->permissions()->sync($request->permissions);
+
+            return redirect()->route('admin.roles.index')->with('success', 'role Updated successfully');
+
+        } catch (\Exception $e) {
+            Log::error('Error updating role: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'An error occurred while updating the role')->withInput();
+        }
     }
 
     /**
@@ -79,6 +137,43 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        
+        try {
+            $role = role::find($id);
+            if (!$role) {
+                return redirect()->route('admin.roles.index')->with('error', 'role not found');
+            }
+            // Manually delete related records
+            $role->permissions()->detach();
+            $role->delete();
+            return redirect()->route('admin.roles.index')->with('success', 'role deleted successfully');
+            
+
+        } catch (\Exception $e) {
+            Log::error('Error deleting role: ' . $e->getMessage());
+            return redirect()->route('admin.roles.index')->with('error', 'An error occurred while deleting the role');
+        }
+        
+    }
+    public function destroy_role_permissions($role_id,$permission_id)
+    {
+        
+        try {
+            $role = role::find($role_id);
+            $permission = Permission::find($permission_id);
+
+            if (!$role &&  !$permission ) {
+                return redirect()->route('admin.roles.index')->with('error', 'role not found');
+            }
+            // Manually delete permission records
+            $role->permissions()->detach($permission_id);
+            return redirect()->route('admin.roles.permissions',$role_id)->with('success', 'permission removed successfully');
+
+
+        } catch (\Exception $e) {
+            Log::error('Error deleting permission: ' . $e->getMessage());
+            return redirect()->route('admin.roles.permissions',$role_id)->with('error', 'An error occurred while deleting the role');
+        }
+        
     }
 }

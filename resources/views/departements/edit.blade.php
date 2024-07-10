@@ -38,7 +38,7 @@
             @endif
           </div>
           <div class="form-group">
-            <label for="number">Number</label>
+            <label for="number">Number <span class="text-danger">*</span></label>
             <input type="text" name="number" value="{{$department->number}}" class="form-control" id="number" placeholder="Enter Number">
             @if($errors->has('number'))
             <span class="invalid-feedback d-block"  role="alert"><strong>{{ $errors->first('number') }}</strong></span>

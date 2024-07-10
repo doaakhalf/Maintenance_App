@@ -1,22 +1,18 @@
 
 @extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Role Permissions')
 
 @section('content_header')
-    <h1>users</h1>
+    <h1><strong>{{$role ->role_name}} </strong> Permissions</h1>
 @stop
 
 @section('content')
 <div class="card">
 
     <div class="card-header d-flex justify-content-between">
-        <div>
-        <h3 class="card-title">users List</h3>
-
-        </div>
-        <a href="{{ route('admin.users.create') }}" class="btn btn-primary btn-sm   ">Create user</a>
-        <div></div>
+        <h3 class="card-title">Role Permissions List</h3>
+        <a href="{{ route('admin.roles.edit',$role->id) }}" class="btn btn-primary btn-sm   ">Edit Permissions To {{$role ->role_name}} Role</a>
 
     </div>
     <div class="card-body">
@@ -30,31 +26,27 @@
         </div>
     @endif
 
-        <table id="users-table" class="table table-bordered table-striped">
+        <table id="roles-table" class="table table-bordered table-striped">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>User Name</th>
-                    <th>User Email</th>
-                    <th>User Role</th>
+                    <th>Permission Name</th>
+                
 
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($users as $user)
+                @foreach ($role->permissions as $permission)
                     <tr>
-                        <td>{{ $user->id }}</td>
-                        <td>{{ $user->name ?$user->name:"-" }}</td>
-                        <td>{{ $user->email }}</td>
-                        <td>{{ $user->role->role_name }}</td>
+                        <td>{{ $permission->id }}</td>
+                        <td>{{ $permission->permission_name }}</td>
+                    
 
                         <td>
-                            <!-- <a href="{{ route('admin.users.show', $user->id) }}" class="btn btn-primary btn-sm">View</a> -->
-                            <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-warning btn-sm">Edit</a>
-
-                            <button class="btn btn-danger btn-sm" onclick="confirmDelete('{{ $user->id }}')">Delete</button>
-                            <form id="delete-form-{{ $user->id }}" action="{{ route('admin.users.destroy', $user->id) }}" method="POST" style="display: none;">
+                           
+                            <button class="btn btn-danger btn-sm" onclick="confirmDelete('{{ $permission->id }}')">Remove</button>
+                            <form id="delete-form-{{ $permission->id }}" action="{{ route('admin.roles.permissions.destroy', [$role->id,$permission->id]) }}" method="POST" style="display: none;">
                                 @csrf
                                 @method('DELETE')
                             </form>
@@ -65,15 +57,15 @@
             <tfoot>
                 <tr>
                     <th>ID</th>
-                    <th>User Name</th>
-                    <th>User Email</th>
-                    <th>User Role</th>
+                    <th>role Name</th>
+               
                     <th>Actions</th>
                 </tr>
             </tfoot>
         </table>
     </div>
-    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -83,7 +75,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                Are you sure you want to delete this record?
+                Are you sure you want to delete this permission from role {{$role->role_name}} ?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -106,16 +98,20 @@
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
     <script>
        
+      
         $(document).ready(function() {
-            $('#users-table').DataTable();
+            $('#roles-table').DataTable();
         });
-        function confirmDelete(id) {
-            $('#confirmDeleteBtn').data('id', id);
+        
+        function confirmDelete(permission_id) {
+            
+            $('#confirmDeleteBtn').data('permission_id', permission_id);
+
             $('#deleteModal').modal('show');
         }
 
         $('#confirmDeleteBtn').click(function () {
-            var id = $(this).data('id');
+            var id = $(this).data('permission_id');
             $('#delete-form-' + id).submit();
         });
     </script>

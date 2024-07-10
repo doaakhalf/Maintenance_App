@@ -37,7 +37,7 @@
             @endif
           </div>
           <div class="form-group">
-            <label for="number">Number</label>
+            <label for="number">Number <span class="text-danger">*</span></label>
             <input type="text" name="number" class="form-control" id="number" placeholder="Enter Number">
             @if($errors->has('number'))
             <span class="invalid-feedback d-block"  role="alert"><strong>{{ $errors->first('number') }}</strong></span>
@@ -45,7 +45,7 @@
             @endif
           </div>
           <div class="form-group">
-            <label for="location">Location</label>
+            <label for="location">Location </label>
             <input type="text" name="location" class="form-control" id="location" placeholder="Enter Location">
             @if($errors->has('location'))
             <span class="invalid-feedback d-block"  role="alert"><strong>{{ $errors->first('location') }}</strong></span>

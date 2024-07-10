@@ -327,6 +327,13 @@ return [
             'label' =>1,
             'label_color' => 'success',
         ],
+        [
+            'text' => 'Equipment',
+            'url' => 'admin/equipment',
+            'icon' => 'far fa-fw fa-file',
+            'label' =>1,
+            'label_color' => 'success',
+        ],
         ['header' => 'account_settings'],
         [
             'text' => 'profile',
@@ -347,6 +354,11 @@ return [
         [
             'text' => 'roles',
             'url' => 'admin/roles',
+            'icon' => 'fas fa-fw fa-lock',
+        ],
+        [
+            'text' => 'permissions',
+            'url' => 'admin/permissions',
             'icon' => 'fas fa-fw fa-lock',
         ],
         [
