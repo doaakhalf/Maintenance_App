@@ -131,7 +131,10 @@ class DepartmentController extends Controller
             if (!$department) {
                 return redirect()->route('admin.departments.index')->with('error', 'Department not found');
             }
+            if(count($department->equipments) >0){
+                return redirect()->route('admin.departments.index')->with('error', 'there are Equipment related to this department');
 
+            }
             $department->delete();
             return redirect()->route('admin.departments.index')->with('success', 'Department deleted successfully');
         } catch (\Exception $e) {

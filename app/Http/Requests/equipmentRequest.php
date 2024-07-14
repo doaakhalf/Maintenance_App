@@ -13,7 +13,7 @@ class equipmentRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,16 @@ class equipmentRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => 'nullable|string|max:255',
+            'sn' => 'required|string|max:255|unique:equipment,sn,' . $this->route('equipment'),
+            'model' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'class' => 'nullable|in:A,B,C',
+            'department_id' => 'required|exists:departments,id',
+            'price' => 'nullable|numeric|min:0',
+            'ppm' => 'nullable|integer|min:0',
+            'calibration' => 'nullable|boolean',
+            'calibration_cycle' => 'nullable|integer|min:0|required_if:calibration,true',
         ];
     }
 }

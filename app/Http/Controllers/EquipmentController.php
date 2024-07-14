@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\equipmentRequest;
+use App\Models\Department;
+use App\Models\Equipment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class EquipmentController extends Controller
 {
@@ -13,7 +17,8 @@ class EquipmentController extends Controller
      */
     public function index()
     {
-        //
+        $equipment = Equipment::all();
+        return view('equipment.index', compact('equipment'));
     }
 
     /**
@@ -23,7 +28,10 @@ class EquipmentController extends Controller
      */
     public function create()
     {
-        //
+        $departments=Department::all();
+        return view('equipment.create', compact('departments'));
+
+        
     }
 
     /**
@@ -32,11 +40,27 @@ class EquipmentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(equipmentRequest $request)
     {
-        //
-    }
+        try {
+            $equipment = new Equipment($request->all());
+            if ($request->hasFile('image')) {
+                $path = $request->file('image')->store('images/equipments', 'public');
+                $equipment->image = $path;
+            }
+            $equipment->save();
 
+            return redirect()->route('admin.equipment.index')->with('success', 'Equipment created successfully');
+        } catch (\Exception $e) {
+            Log::error('Error creating equipment: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'An error occurred while creating the equipment')->withInput();
+        }
+    }
+    public function import_patch(equipmentRequest $request)
+    {
+       
+    }
+    
     /**
      * Display the specified resource.
      *
@@ -45,7 +69,12 @@ class EquipmentController extends Controller
      */
     public function show($id)
     {
-        //
+        
+            $equipment =  Equipment::find($id);
+            if(!$equipment)
+                return redirect()->route('admin.equipment.index')->with('error', 'Equipment not found');
+            
+            return view('equipment.show', compact('equipment'));
     }
 
     /**
@@ -56,6 +85,13 @@ class EquipmentController extends Controller
      */
     public function edit($id)
     {
+        $equipment =  Equipment::find($id);
+        $departments=Department::all();
+
+        if(!$equipment)
+            return redirect()->route('admin.equipment.index')->with('error', 'Equipment not found');
+        
+        return view('equipment.edit', compact('equipment','departments'));
         //
     }
 
@@ -66,9 +102,25 @@ class EquipmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(equipmentRequest $request, $id)
     {
-        //
+        try {
+            $equipment = Equipment::find($id);
+            if (!$equipment) {
+                return redirect()->route('admin.equipment.index')->with('error', 'Equipment not found');
+            }
+            $equipment->fill($request->all());
+            if ($request->hasFile('image')) {
+                $path = $request->file('image')->store('images/equipments', 'public');
+                $equipment->image = $path;
+            }
+            $equipment->save();
+
+            return redirect()->route('admin.equipment.index')->with('success', 'Equipment created successfully');
+        } catch (\Exception $e) {
+            Log::error('Error creating equipment: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'An error occurred while update the equipment')->withInput();
+        }
     }
 
     /**
@@ -79,6 +131,17 @@ class EquipmentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $equipment = Equipment::find($id);
+            if (!$equipment) {
+                return redirect()->route('admin.equipment.index')->with('error', 'Equipment not found');
+            }
+          
+            $equipment->delete();
+            return redirect()->route('admin.equipment.index')->with('success', 'Equipment deleted successfully');
+        } catch (\Exception $e) {
+            Log::error('Error deleting equipment: ' . $e->getMessage());
+            return redirect()->route('admin.equipment.index')->with('error', 'An error occurred while deleting the Equipment');
+        }
     }
 }

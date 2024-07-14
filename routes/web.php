@@ -75,7 +75,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         'update' => 'admin.equipment.update',
         'destroy' => 'admin.equipment.destroy',
     ]);
-    
+    Route::post('/equipment/import_patch]', [App\Http\Controllers\RoleController::class, 'permissions'])->name('admin.roles.permissions');
+   
 })->middleware('auth');
 
 Auth::routes(); 
