@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Equipment;
+
 return [
 
     /*
@@ -333,6 +335,18 @@ return [
             'icon' => 'far fa-fw fa-file',
             'label' =>1,
             'label_color' => 'success',
+        ],
+        [
+            'text' => 'Maintenance',
+            'icon' => 'far fa-fw fa-file',
+            
+
+            'submenu' => [
+                [
+                    'text' => 'Maintenance Request',
+                    'url' => 'admin/maintenance-requests',
+                ],
+        ],
         ],
         ['header' => 'account_settings'],
         [

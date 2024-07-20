@@ -9,13 +9,35 @@
 
 @section('content')
 <div class="card">
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+  
+ 
 
     <div class="card-header d-flex justify-content-between">
         <h3 class="card-title">Equipment List</h3>
-        <a href="{{ route('admin.equipment.create') }}" class="btn btn-primary btn-sm   ">Create Equipment</a>
-        <!-- <a href="{{ route('admin.equipment.import_patch') }}" class="btn btn-primary btn-sm   ">Create Equipment</a> -->
+       <div class="d-flex ml-auto" >
+            <a href="{{ route('admin.equipment.create') }}" class="btn btn-primary btn-sm   ">Create Equipment</a>
+             <!-- Hidden Form for Uploading File -->
+            <form id="importForm" action="{{ route('admin.equipment.import') }}" method="POST" enctype="multipart/form-data" >
+                @csrf
 
-
+                <div class="input-group">
+                <label class="input-group-text" for="fileUploadTrigger">Upload Excel</label>
+                <input name="file" type="file" style="display: none;" class="form-control" id="fileUploadTrigger" onchange="uploadFile()" accept=".xlsx,.xls" >
+            </div>
+            </form>
+      
+        </div>
     </div>
     <div class="card-body">
     @if($errors->any())
@@ -141,6 +163,13 @@
             var id = $(this).data('id');
             $('#delete-form-' + id).submit();
         });
+        function triggerFileUpload() {
+        document.getElementById('fileInput').click();
+    }
+
+    function uploadFile() {
+        document.getElementById('importForm').submit();
+    }
     </script>
     
 @stop

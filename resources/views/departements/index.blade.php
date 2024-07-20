@@ -12,8 +12,9 @@
 
     <div class="card-header d-flex justify-content-between">
         <h3 class="card-title">Departments List</h3>
+        <div class="d-flex ml-auto" >
         <a href="{{ route('admin.departments.create') }}" class="btn btn-primary btn-sm   ">Create Department</a>
-
+        </div>
     </div>
     <div class="card-body">
     @if($errors->any())

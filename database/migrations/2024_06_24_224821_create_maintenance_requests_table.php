@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('equipment_id')->constrained('equipment');
             $table->string('name')->nullable();;
-            $table->enum('type', ['In', 'Out', 'Warranty']);
+            $table->enum('type', ['Inner', 'Outer', 'Warranty']);
             $table->string('status')->default('Pending');
             $table->timestamp('request_date')->useCurrent();
             $table->unsignedBigInteger('requester_id');

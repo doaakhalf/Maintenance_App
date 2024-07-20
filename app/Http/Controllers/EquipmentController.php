@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\equipmentRequest;
+use App\Imports\EquipmentImport;
 use App\Models\Department;
 use App\Models\Equipment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EquipmentController extends Controller
 {
@@ -56,9 +58,27 @@ class EquipmentController extends Controller
             return redirect()->back()->with('error', 'An error occurred while creating the equipment')->withInput();
         }
     }
-    public function import_patch(equipmentRequest $request)
+    public function import(Request $request)
     {
-       
+        
+            $request->validate([
+                'file' => 'required|mimes:xlsx,xls',
+            ]);
+            try {
+                Excel::import(new EquipmentImport, $request->file('file'));
+    
+                return redirect()->route('admin.equipment.index')->with('success', 'Equipments imported successfully.');
+            } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+                $failures = $e->failures();
+                $errors = [];
+                // Optionally, log or process the validation failures
+                foreach ($failures as $failure) {
+                    $errors[] = "Row {$failure->row()}: " . implode(', ', $failure->errors()) . " (Attribute: {$failure->attribute()})";
+                }
+    
+                return back()->withErrors($errors);
+               
+            }
     }
     
     /**

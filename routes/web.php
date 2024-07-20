@@ -3,9 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EquipmentController;
+use App\Http\Controllers\MaintenanceRequestController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Models\MaintenanceRequest;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -18,7 +20,7 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::middleware(['auth'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'role:Admin,Manager'])->prefix('admin')->group(function () {
 
     Route::get('/home', function () {
         return view('dashboard');
@@ -75,8 +77,19 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         'update' => 'admin.equipment.update',
         'destroy' => 'admin.equipment.destroy',
     ]);
-    Route::post('/equipment/import_patch]', [App\Http\Controllers\RoleController::class, 'permissions'])->name('admin.roles.permissions');
+    Route::post('/equipment/import]', [App\Http\Controllers\EquipmentController::class, 'import'])->name('admin.equipment.import');
    
+    // Maintenance Request
+    Route::resource('/maintenance-requests',MaintenanceRequestController::class)->names([
+        'index' => 'admin.maintenance-requests.index',
+        'create' => 'admin.maintenance-requests.create',
+        'store' => 'admin.maintenance-requests.store',
+        'show' => 'admin.maintenance-requests.show',
+        'edit' => 'admin.maintenance-requests.edit',
+        'update' => 'admin.maintenance-requests.update',
+        'destroy' => 'admin.maintenance-requests.destroy',
+    ]);
+    Route::get('departments/equipment/{id}', [MaintenanceRequestController::class, 'getDepartmentByEquipment']);
 })->middleware('auth');
 
 Auth::routes(); 

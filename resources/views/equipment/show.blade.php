@@ -52,7 +52,7 @@
                 <p class="col-md-4"><strong>Price:</strong> {{ $equipment->price ?? 'N/A' }}</p>
                 <p class="col-md-4"><strong>PPM:</strong> {{ $equipment->ppm ?? 'N/A' }}</p>
                
-                <p class="col-md-4"><strong>Calibration:</strong> {{ $equipment->need_calibration ? 'Yes' : 'No' }}</p>
+                <p class="col-md-4"><strong>Need Calibration:</strong> {{ $equipment->need_calibration ? 'Yes' : 'No' }}</p>
                 @if ($equipment->need_calibration)
                     <p class="col-md-4"><strong>Calibration Cycle:</strong> {{ $equipment->calibration_cycle ?? 'N/A' }}</p>
                 @endif

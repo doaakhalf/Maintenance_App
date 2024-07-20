@@ -15,8 +15,9 @@
         <h3 class="card-title">users List</h3>
 
         </div>
+        <div class="d-flex ml-auto" >
         <a href="{{ route('admin.users.create') }}" class="btn btn-primary btn-sm   ">Create user</a>
-        <div></div>
+        </div>
 
     </div>
     <div class="card-body">
