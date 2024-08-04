@@ -22,6 +22,10 @@
         {{-- Configured right links --}}
         @each('adminlte::partials.navbar.menu-item', $adminlte->menu('navbar-right'), 'item')
 
+        <!-- notification alert -->
+        @include('adminlte::partials.navbar.notification-nav-item')
+
+        <!-- notification alert -->
         {{-- User menu link --}}
         @if(Auth::user())
             @if(config('adminlte.usermenu_enabled'))
@@ -35,6 +39,7 @@
         @if(config('adminlte.right_sidebar'))
             @include('adminlte::partials.navbar.menu-item-right-sidebar-toggler')
         @endif
+      
     </ul>
 
 </nav>

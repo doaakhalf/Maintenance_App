@@ -14,7 +14,7 @@
 
 @section('body')
     <div class="wrapper">
-
+ 
         {{-- Preloader Animation (fullscreen mode) --}}
         @if($preloaderHelper->isPreloaderEnabled())
             @include('adminlte::partials.common.preloader')
@@ -55,4 +55,19 @@
 @section('adminlte_js')
     @stack('js')
     @yield('js')
+
+       <!-- Pass authenticated user's ID to JavaScript -->
+       <script>
+        
+        if("{{auth()->check()}}")
+            var userId = "{{ auth()->user()->id }}";
+        else
+            var userId = null;
+      
+    </script>
+
+    <!-- Include your app.js -->
+    <script src="{{ asset('js/app.js') }}"></script>
+
+ 
 @stop

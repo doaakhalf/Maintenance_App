@@ -3046,6 +3046,8 @@
     $__default["default"].fn[NAME] = JQUERY_NO_CONFLICT;
     return Treeview._jQueryInterface;
   };
+ 
+
 
   exports.CardRefresh = CardRefresh;
   exports.CardWidget = CardWidget;

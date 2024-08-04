@@ -1,7 +1,7 @@
 <div class="form-row">
 <div class="form-group col-md-4">
         <label for="equipment_name">Maintenance Request  Name </label>
-        <input  type="text" id="name" name="name" class="form-control" >
+        <input  type="text" id="name" name="name" value="{{ old('name', $maintenance_request->name ?? '') }}" class="form-control" >
         @if($errors->has('name'))
           <span class="invalid-feedback d-block" role="alert"><strong>{{ $errors->first('name') }}</strong></span>
 
@@ -22,65 +22,38 @@
     </div>
     <div class="form-group col-md-4">
         <label for="equipment_name">Equipment Name </label>
-        <input disabled type="text" id="equipment_name" name="equipment_name" class="form-control" >
-  
+        <input disabled type="text" id="equipment_name" name="equipment_name"  class="form-control" value="{{ old('equipment_name', $maintenance_request->equipment->name ?? '') }}" >
+ 
     </div>
     <div class="form-group col-md-4">
         <label for="equipment_model">Equipment Model  </label>
-        <input disabled type="text" id="equipment_model" name="equipment_model" class="form-control" >
+        <input disabled type="text" id="equipment_model" name="equipment_model" class="form-control" value="{{ old('equipment_model', $maintenance_request->equipment->model ?? '') }}" >
   
     </div>
     <div class="form-group col-md-4">
         <label for="department_number">Department Number </label>
-        <input disabled type="text" id="department_number" name="department_number" class="form-control" >
+        <input disabled type="text" id="department_number" name="department_number" class="form-control" value="{{ old('department_number', $maintenance_request->equipment->department->number ?? '') }}" >
   
     </div>
     <div class="form-group col-md-4">
         <label for="department_number">Department Name </label>
-        <input disabled type="text" id="department_name" name="department_name" class="form-control" >
+        <input disabled type="text" id="department_name" name="department_name" class="form-control" value="{{ old('department_name', $maintenance_request->equipment->department->name ?? '') }}" >
   
     </div>
-    <div class="form-group col-md-4">
+    <div class="form-group col-md-12">
         <label for="department_location">Department Location </label>
-        <input disabled type="text" id="department_location" name="department_location" class="form-control" >
+        <input disabled type="text" id="department_location" name="department_location" class="form-control" value="{{ old('department_location',$maintenance_request->equipment->department->location ?? '') }}" >
   
     </div>
 </div>
 <div class="form-row">
-    <div class="form-group col-md-4">
-    <label for="signed_to_id">Type <span class="text-danger">*</span></label>
-
-        <div class="form-check">
-        <input class="form-check-input" type="radio" value="Inner" name="type" id="type1">
-        <label class="form-check-label" for="flexRadioDefault1">
-           Inner
-        </label>
-        </div>
-      
-        <div class="form-check">
-            <input class="form-check-input" type="radio"  value="Outer" name="type" id="type2" >
-            <label class="form-check-label" for="flexRadioDefault2">
-                Outer
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input"  type="radio" value="Warranty" name="type" id="type3" >
-            <label class="form-check-label" for="flexRadioDefault2">
-                Warranty
-            </label>
-        </div>
-        @if($errors->has('type'))
-          <span class="invalid-feedback d-block" role="alert"><strong>{{ $errors->first('type') }}</strong></span>
-
-          @endif
-    </div>
-    <div class="form-group col-md-8">
+<div class="form-group col-md-8">
         <label for="signed_to_id">Sign to <span class="text-danger">*</span></label>
       
             <select name="signed_to_id" id="signed_to_id" class="form-control" required>
                 <option value="">Select User</option>
                 @foreach($users as $user)
-                    <option value="{{ $user->id }}" {{ old('signed_to_id') == $user->id ? 'selected' : '' }}>
+                    <option value="{{ $user->id }}" {{isset($maintenance_request)? ( old('signed_to_id',$maintenance_request->signed_to_id) == $user->id ? 'selected' : ''):"" }}>
                         {{ $user->email }}
                     </option>
                 @endforeach
@@ -90,6 +63,34 @@
 
           @endif
     </div>
+    <div class="form-group col-md-4">
+    <label for="signed_to_id">Type <span class="text-danger">*</span></label>
+
+        <div class="form-check">
+        <input class="form-check-input" type="radio" value="Inner" name="type" id="type1" {{ isset($maintenance_request)? ( old('type',$maintenance_request->type) == $maintenance_request->type ? 'checked' : ''):"" }}>
+        <label class="form-check-label" for="flexRadioDefault1">
+           Inner
+        </label>
+        </div>
+      
+        <div class="form-check">
+            <input class="form-check-input" type="radio"  value="Outer" name="type" id="type2"  {{isset($maintenance_request)? ( old('type',$maintenance_request->type) == $maintenance_request->type ? 'checked' : ''):"" }} >
+            <label class="form-check-label" for="flexRadioDefault2">
+                Outer
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input"  type="radio" value="Warranty" name="type" id="type3" {{isset($maintenance_request)? ( old('type',$maintenance_request->type) == $maintenance_request->type ? 'checked' : ''):"" }} >
+            <label class="form-check-label" for="flexRadioDefault2">
+                Warranty
+            </label>
+        </div>
+        @if($errors->has('type'))
+          <span class="invalid-feedback d-block" role="alert"><strong>{{ $errors->first('type') }}</strong></span>
+
+          @endif
+    </div>
+   
   
 </div>
 

@@ -16,7 +16,7 @@
     <!-- Scripts -->
     {{-- @vite(['resources/sass/app.scss', 'resources/js/app.js']) --}}
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-    <link rel="stylesheet" href="{{ mix('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
 
     <!-- DataTables CSS -->

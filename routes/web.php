@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EquipmentController;
+use App\Http\Controllers\MaintenancePerformController;
 use App\Http\Controllers\MaintenanceRequestController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
@@ -20,7 +21,7 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::middleware(['auth', 'role:Admin,Manager'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'role:Admin,Manager,Technician'])->prefix('admin')->group(function () {
 
     Route::get('/home', function () {
         return view('dashboard');
@@ -88,9 +89,22 @@ Route::middleware(['auth', 'role:Admin,Manager'])->prefix('admin')->group(functi
         'edit' => 'admin.maintenance-requests.edit',
         'update' => 'admin.maintenance-requests.update',
         'destroy' => 'admin.maintenance-requests.destroy',
-    ]);
+    ])->middleware(['auth', 'role:Admin,Manager,Technician']);
     Route::get('departments/equipment/{id}', [MaintenanceRequestController::class, 'getDepartmentByEquipment']);
-})->middleware('auth');
+  // Maintenance Perform
+  Route::resource('/maintenance-perform/request/{request_id}',MaintenancePerformController::class)->names([
+    'index' => 'admin.maintenance-perform.index',
+    'create' => 'admin.maintenance-perform.create',
+    'store' => 'admin.maintenance-perform.store',
+    'show' => 'admin.maintenance-perform.show',
+    'edit' => 'admin.maintenance-perform.edit',
+    'update' => 'admin.maintenance-perform.update',
+    'destroy' => 'admin.maintenance-perform.destroy',
+])->middleware(['auth', 'role:Admin,Manager,Technician']);
+
+    })->middleware('auth');
+
+
 
 Auth::routes(); 
 

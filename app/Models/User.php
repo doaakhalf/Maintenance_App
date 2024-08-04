@@ -91,5 +91,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(RepairRequest::class, 'requester_id');
     }
-   
+    public function unreadNotifications()
+    {
+        return $this->notifications()->orderBy('created_at', 'desc')->whereNull('read_at');
+    }
 }

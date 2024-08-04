@@ -138,7 +138,7 @@ class EquipmentController extends Controller
 
             return redirect()->route('admin.equipment.index')->with('success', 'Equipment created successfully');
         } catch (\Exception $e) {
-            Log::error('Error creating equipment: ' . $e->getMessage());
+            Log::error('Error Updating equipment: ' . $e->getMessage());
             return redirect()->back()->with('error', 'An error occurred while update the equipment')->withInput();
         }
     }
