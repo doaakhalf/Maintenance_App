@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -47,7 +48,7 @@ class User extends Authenticatable
 
     public function role()
     {
-        return $this->belongsTo(Role::class,'role_id');
+        return $this->belongsTo(Role::class,'role_id') ;
     }
     public function hasPermission($permission)
     {
@@ -93,6 +94,6 @@ class User extends Authenticatable
     }
     public function unreadNotifications()
     {
-        return $this->notifications()->orderBy('created_at', 'desc')->whereNull('read_at');
+        return $this->notifications()->whereNull('read_at')->orderBy('created_at', 'desc');
     }
 }

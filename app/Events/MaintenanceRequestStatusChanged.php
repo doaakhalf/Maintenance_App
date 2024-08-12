@@ -11,16 +11,16 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MaintenanceRequestCreated implements ShouldBroadcast
+class MaintenanceRequestStatusChanged implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $maintenanceRequest;
     /**
      * Create a new event instance.
      *
      * @return void
      */
+    public $maintenanceRequest;
     public function __construct(MaintenanceRequest $maintenanceRequest)
     {
         $this->maintenanceRequest = $maintenanceRequest;
@@ -32,18 +32,21 @@ class MaintenanceRequestCreated implements ShouldBroadcast
      *
      * @return \Illuminate\Broadcasting\Channel|array
      */
+    // public function broadcastOn()
+    // {
+    //     return new PrivateChannel('channel-name');
+    // }
     public function broadcastOn()
     {
         // return new PrivateChannel('channel-name');
-        return new Channel('maintenance-request.' . $this->maintenanceRequest->signed_to_id);
+        return new Channel('maintenance-request-change-status.' . $this->maintenanceRequest->signed_to_id);
 
-        // return new PrivateChannel('maintenance-request.' . $this->maintenanceRequest->signed_to_id);
     }
     public function broadcastWith()
     {
         return [
             'maintenance_request_id' => $this->maintenanceRequest->id,
-            'name' => $this->maintenanceRequest->name?$this->maintenanceRequest->name:'New Maintenance Request',
+            'name' => $this->maintenanceRequest->name,
             'request_date' => $this->maintenanceRequest->request_date,
             'type' => $this->maintenanceRequest->type,
             'status' => $this->maintenanceRequest->status,
@@ -56,6 +59,6 @@ class MaintenanceRequestCreated implements ShouldBroadcast
   
     public function broadcastAs()
     {
-        return 'MaintenanceRequestCreated';
+        return 'MaintenanceRequestStatusChanged';
     }
 }

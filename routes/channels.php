@@ -19,3 +19,12 @@ Broadcast::channel('maintenance-request.{id}', function ($user, $id) {
     
     return (int) $user->id === (int) $id;
 });
+
+Broadcast::channel('maintenance-perform.{id}', function ($user, $id) {
+    
+    return (int) $user->id === (int) $id;
+});
+Broadcast::channel('maintenance-request-change-status.{id}', function ($user, $id) {
+    
+    return (int) $user->id === (int) $id;
+});

@@ -2,27 +2,28 @@
 
 namespace App\Notifications;
 
-use App\Models\MaintenanceRequest;
+use App\Models\MaintenancePerform;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class MaintenanceRequestAssigned extends Notification implements ShouldQueue
+class MaintenancePerformReply extends Notification implements ShouldQueue
 {
     use Queueable;
-    protected $maintenanceRequest;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(MaintenanceRequest $maintenanceRequest)
+    public $maintenancePerform;
+
+    public function __construct(MaintenancePerform $maintenancePerform)
     {
-        $this->maintenanceRequest = $maintenanceRequest;
         //
+        $this->maintenancePerform=$maintenancePerform;
     }
 
     /**
@@ -59,24 +60,20 @@ class MaintenanceRequestAssigned extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
         return [
-            'maintenance_request_id' => $this->maintenanceRequest->id,
-            'name' => $this->maintenanceRequest->name,
-            'request_date' => $this->maintenanceRequest->request_date,
-            'equipment_id' => $this->maintenanceRequest->equipment_id,
-            'title' =>'New Maintenance Request',
-
+            'maintenance_perform_id' => $this->maintenancePerform->id,
+            'maintenance_request_id' => $this->maintenancePerform->maintenance_request_id,
+            'perform_date' => $this->maintenancePerform->perform_date,
+            'title' =>'New Maintenance Perform',
 
         ];
     }
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            'maintenance_request_id' => $this->maintenanceRequest->id,
-            'name' => $this->maintenanceRequest->name,
-            'request_date' => $this->maintenanceRequest->request_date,
-            'equipment_id' => $this->maintenanceRequest->equipment_id,
-            'title' =>'New Maintenance Request',
-
+            'maintenance_perform_id' => $this->maintenancePerform->id,
+            'maintenance_request_id' => $this->maintenancePerform->maintenance_request_id,
+            'perform_date' => $this->maintenancePerform->perform_date,
+            'title' =>'New Maintenance Perform',
 
         ]);
     }

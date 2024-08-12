@@ -3029,7 +3029,33 @@ window.Echo.channel('maintenance-request.' + userId).listen('.MaintenanceRequest
   notification.classList.add('dropdown-item');
   notification.innerHTML = " <i class=\"fas fa-envelope mr-2\"></i> " + data.name + "\n      <span class=\"float-right text-muted text-sm\">3 mins</span>";
   // notifications.appendChild(notification);
-  $('#notifications > a:last').before(notification);
+  $('#notifications > a:first').before(notification);
+  var notifications_counter = document.getElementById('notifications-counter');
+  var notifications_counter_badge = document.getElementById('notifications-counter-badge');
+  notifications_counter.innerText = parseInt(notifications_counter.innerText) + 1;
+  notifications_counter_badge.innerText = parseInt(notifications_counter_badge.innerText) + 1;
+});
+window.Echo.channel('maintenance-perform.' + userId).listen('.MaintenancePerformCreated', function (data) {
+  console.log(data, _typeof(data));
+  var notifications = document.getElementById('notifications');
+  var notification = document.createElement('a');
+  notification.classList.add('dropdown-item');
+  notification.innerHTML = " <i class=\"fas fa-envelope mr-2\"></i> " + data.name + "\n      <span class=\"float-right text-muted text-sm\">3 mins</span>";
+  // notifications.appendChild(notification);
+  $('#notifications > a:first').before(notification);
+  var notifications_counter = document.getElementById('notifications-counter');
+  var notifications_counter_badge = document.getElementById('notifications-counter-badge');
+  notifications_counter.innerText = parseInt(notifications_counter.innerText) + 1;
+  notifications_counter_badge.innerText = parseInt(notifications_counter_badge.innerText) + 1;
+});
+window.Echo.channel('maintenance-request-change-status.' + userId).listen('.MaintenanceRequestStatusChanged', function (data) {
+  console.log(data, _typeof(data));
+  var notifications = document.getElementById('notifications');
+  var notification = document.createElement('a');
+  notification.classList.add('dropdown-item');
+  notification.innerHTML = " <i class=\"fas fa-envelope mr-2\"></i> " + data.name + "\n      <span class=\"float-right text-muted text-sm\">3 mins</span>";
+  // notifications.appendChild(notification);
+  $('#notifications > a:first').before(notification);
   var notifications_counter = document.getElementById('notifications-counter');
   var notifications_counter_badge = document.getElementById('notifications-counter-badge');
   notifications_counter.innerText = parseInt(notifications_counter.innerText) + 1;

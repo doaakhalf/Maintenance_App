@@ -32,7 +32,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('spare_part_request_id');
             $table->unsignedBigInteger('spare_part_id');
-            $table->integer('quantity');
+            $table->integer('quantity')->nullable();
             // $table->decimal('price',10,2);
             // $table->string('currency');
             // $table->date('warranty');

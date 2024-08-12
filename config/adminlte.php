@@ -328,6 +328,7 @@ return [
             'icon' => 'far fa-fw fa-file',
             'label' =>1,
             'label_color' => 'success',
+            'can'=>'Admin-Manager'
         ],
         [
             'text' => 'Equipment',
@@ -335,7 +336,10 @@ return [
             'icon' => 'far fa-fw fa-file',
             'label' =>1,
             'label_color' => 'success',
+            'can'=>'Admin-Manager'
+
         ],
+        
         [
             'text' => 'Maintenance',
             'icon' => 'far fa-fw fa-file',
@@ -345,6 +349,10 @@ return [
                 [
                     'text' => 'Maintenance Request',
                     'url' => 'admin/maintenance-requests',
+                ],
+                [
+                    'text' => 'Maintenance Perform',
+                    'url' => 'admin/maintenance-perform',
                 ],
         ],
         ],
@@ -359,22 +367,22 @@ return [
             'url' => 'admin/settings',
             'icon' => 'fas fa-fw fa-lock',
         ],
-        ['header' => 'Users Control'],
-        [
-            'text' => 'users',
-            'url' => 'admin/users',
-            'icon' => 'fas fa-fw fa-users',
-        ],
-        [
-            'text' => 'roles',
-            'url' => 'admin/roles',
-            'icon' => 'fas fa-fw fa-lock',
-        ],
-        [
-            'text' => 'permissions',
-            'url' => 'admin/permissions',
-            'icon' => 'fas fa-fw fa-lock',
-        ],
+        // ['header' => 'Users Control'],
+        // [
+        //     'text' => 'users',
+        //     'url' => 'admin/users',
+        //     'icon' => 'fas fa-fw fa-users',
+        // ],
+        // [
+        //     'text' => 'roles',
+        //     'url' => 'admin/roles',
+        //     'icon' => 'fas fa-fw fa-lock',
+        // ],
+        // [
+        //     'text' => 'permissions',
+        //     'url' => 'admin/permissions',
+        //     'icon' => 'fas fa-fw fa-lock',
+        // ],
         [
             'text' => 'multilevel',
             'icon' => 'fas fa-fw fa-share',

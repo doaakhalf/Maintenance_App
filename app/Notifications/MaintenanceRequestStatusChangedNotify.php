@@ -9,7 +9,7 @@ use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class MaintenanceRequestAssigned extends Notification implements ShouldQueue
+class MaintenanceRequestStatusChangedNotify extends Notification implements ShouldQueue
 {
     use Queueable;
     protected $maintenanceRequest;
@@ -63,7 +63,7 @@ class MaintenanceRequestAssigned extends Notification implements ShouldQueue
             'name' => $this->maintenanceRequest->name,
             'request_date' => $this->maintenanceRequest->request_date,
             'equipment_id' => $this->maintenanceRequest->equipment_id,
-            'title' =>'New Maintenance Request',
+            'title' =>'Status Of Maintenance Request Number '. $this->maintenanceRequest->id. 'is changed to '.$this->maintenanceRequest->status,
 
 
         ];
@@ -75,7 +75,8 @@ class MaintenanceRequestAssigned extends Notification implements ShouldQueue
             'name' => $this->maintenanceRequest->name,
             'request_date' => $this->maintenanceRequest->request_date,
             'equipment_id' => $this->maintenanceRequest->equipment_id,
-            'title' =>'New Maintenance Request',
+            'title' =>'Status Of Maintenance Request Number '. $this->maintenanceRequest->id. 'is changed to '.$this->maintenanceRequest->status,
+
 
 
         ]);

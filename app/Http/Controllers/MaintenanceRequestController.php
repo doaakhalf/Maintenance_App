@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Events\MaintenanceRequestCreated;
+use App\Events\MaintenanceRequestStatusChanged;
 use App\Http\Requests\maintenance_requestRequest;
 use App\Models\Equipment;
 use App\Models\MaintenanceRequest;
 use App\Models\User;
 use App\Notifications\MaintenanceRequestAssigned;
+use App\Notifications\MaintenanceRequestStatusChangedNotify;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,6 +26,7 @@ class MaintenanceRequestController extends Controller
     public function index()
     {
         $user=Auth::user();
+       
         if($user->hasRole('Technician'))
          $maintenance_requests=MaintenanceRequest::query()->where('signed_to_id',$user->id)->get();
         else
@@ -178,5 +181,20 @@ class MaintenanceRequestController extends Controller
         $maintenanceRequest->delete();
         return redirect()->back()->with('success', 'Maintenance Request Deleted successfully');
         
+    }
+    public function changeStatus(Request $request, $id)
+    {
+        $maintenanceRequest = MaintenanceRequest::findOrFail($id);
+
+        $maintenanceRequest->status = $request->input('status');
+        $maintenanceRequest->save();
+        // Send notification to the technician and save it
+        $technician = User::find($maintenanceRequest->signed_to_id);
+        $technician->notify(new MaintenanceRequestStatusChangedNotify($maintenanceRequest));
+
+        // Fire event to send realtime notification
+    event(new MaintenanceRequestStatusChanged($maintenanceRequest));
+            
+        return redirect()->route('admin.maintenance-requests.index')->with('success', 'Status updated successfully.');
     }
 }

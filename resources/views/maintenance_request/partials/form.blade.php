@@ -65,22 +65,22 @@
     </div>
     <div class="form-group col-md-4">
     <label for="signed_to_id">Type <span class="text-danger">*</span></label>
-
+  
         <div class="form-check">
-        <input class="form-check-input" type="radio" value="Inner" name="type" id="type1" {{ isset($maintenance_request)? ( old('type',$maintenance_request->type) == $maintenance_request->type ? 'checked' : ''):"" }}>
+        <input class="form-check-input" type="radio" value="Inner" name="type" id="type1" {{ isset($maintenance_request)? ( old('type',$maintenance_request->type) == "Inner" ? 'checked' : ''):"" }}>
         <label class="form-check-label" for="flexRadioDefault1">
            Inner
         </label>
         </div>
       
         <div class="form-check">
-            <input class="form-check-input" type="radio"  value="Outer" name="type" id="type2"  {{isset($maintenance_request)? ( old('type',$maintenance_request->type) == $maintenance_request->type ? 'checked' : ''):"" }} >
+            <input class="form-check-input" type="radio"  value="Outer" name="type" id="type2"  {{isset($maintenance_request)? ( old('type',$maintenance_request->type) == "Outer" ? 'checked' : ''):"" }} >
             <label class="form-check-label" for="flexRadioDefault2">
                 Outer
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input"  type="radio" value="Warranty" name="type" id="type3" {{isset($maintenance_request)? ( old('type',$maintenance_request->type) == $maintenance_request->type ? 'checked' : ''):"" }} >
+            <input class="form-check-input"  type="radio" value="Warranty" name="type" id="type3" {{isset($maintenance_request)? ( old('type',$maintenance_request->type) == "Warranty" ? 'checked' : ''):"" }} >
             <label class="form-check-label" for="flexRadioDefault2">
                 Warranty
             </label>

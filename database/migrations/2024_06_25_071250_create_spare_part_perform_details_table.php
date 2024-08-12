@@ -18,9 +18,9 @@ return new class extends Migration
             $table->unsignedBigInteger('spare_part_perform_id');
             $table->unsignedBigInteger('spare_part_id');
             $table->decimal('price', 10, 2);
-            $table->integer('quantity');
-            $table->string('currency');
-            $table->date('warranty');
+            $table->integer('quantity')->nullable();
+            $table->string('currency')->nullable();
+            $table->date('warranty')->nullable();
             $table->timestamps();
 
             $table->foreign('spare_part_perform_id')->references('id')->on('spare_part_performs')->onDelete('cascade');

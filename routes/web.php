@@ -91,16 +91,28 @@ Route::middleware(['auth', 'role:Admin,Manager,Technician'])->prefix('admin')->g
         'destroy' => 'admin.maintenance-requests.destroy',
     ])->middleware(['auth', 'role:Admin,Manager,Technician']);
     Route::get('departments/equipment/{id}', [MaintenanceRequestController::class, 'getDepartmentByEquipment']);
-  // Maintenance Perform
-  Route::resource('/maintenance-perform/request/{request_id}',MaintenancePerformController::class)->names([
-    'index' => 'admin.maintenance-perform.index',
-    'create' => 'admin.maintenance-perform.create',
-    'store' => 'admin.maintenance-perform.store',
-    'show' => 'admin.maintenance-perform.show',
-    'edit' => 'admin.maintenance-perform.edit',
-    'update' => 'admin.maintenance-perform.update',
-    'destroy' => 'admin.maintenance-perform.destroy',
-])->middleware(['auth', 'role:Admin,Manager,Technician']);
+    Route::patch('/maintenance-requests/{id}/change-status', [MaintenanceRequestController::class, 'changeStatus'])->name('admin.maintenance-requests.change-status');
+    // Maintenance Perform
+  Route::get('/maintenance-perform', [MaintenancePerformController::class, 'index'])->name('admin.maintenance-perform.index')
+  ->middleware(['auth', 'role:Admin,Technician']);;
+
+//   show
+  Route::get('/maintenance-perform/show/{id}', [MaintenancePerformController::class, 'show'])->name('admin.maintenance-perform.show')
+  ->middleware(['auth', 'role:Admin,Technician']);;
+
+// create 
+    Route::get('/maintenance-perform/{maintenance_request_id}/create', [MaintenancePerformController::class, 'create'])->name('admin.maintenance-perform.create')
+    ->middleware(['auth', 'role:Admin,Technician']);
+
+    Route::post('/maintenance-perform/{maintenance_request_id}/store', [MaintenancePerformController::class, 'store'])->name('admin.maintenance-perform.store')
+    ->middleware(['auth', 'role:Admin,Technician']);
+// edit
+Route::get('/maintenance-perform/edit/{id}', [MaintenancePerformController::class, 'edit'])->name('admin.maintenance-perform.edit')
+  ->middleware(['auth', 'role:Admin,Technician']);;
+
+  Route::put('/maintenance-perform/update/{id}', [MaintenancePerformController::class, 'update'])->name('admin.maintenance-perform.update')
+  ->middleware(['auth', 'role:Admin,Technician']);;
+
 
     })->middleware('auth');
 

@@ -19,7 +19,8 @@ class EquipmentController extends Controller
      */
     public function index()
     {
-        $equipment = Equipment::all();
+        $equipment = Equipment::all()->sortDesc();
+        
         return view('equipment.index', compact('equipment'));
     }
 

@@ -8,8 +8,9 @@
     <div class="dropdown-divider"></div>
    
     @foreach(Auth::user()->unreadNotifications()->get() as $notification)
-        <a href="#" class="dropdown-item">
-        <i class="fas fa-envelope mr-2"></i>  @if($notification->type=='App\Notifications\MaintenanceRequestAssigned') New Maintenance Request @endif 
+        <a href="#" style="overflow: auto;" class="dropdown-item">
+        
+        <i class="fas fa-envelope mr-2"></i>  {{isset($notification->data['name'])? $notification->data['name'] :$notification->data['title']}}
         <span class="float-right text-muted text-sm">{{ $notification->created_at->diffForHumans()}}</span>
         </a>
     @endforeach

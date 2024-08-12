@@ -17,12 +17,15 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('maintenance_request_id');
             $table->unsignedBigInteger('technician_id');
+            $table->unsignedBigInteger('requester_id');
+
             $table->timestamp('perform_date')->useCurrent();
             $table->string('status')->default('Pending');
             $table->text('service_report')->nullable();
            
             $table->foreign('maintenance_request_id')->references('id')->on('maintenance_requests')->onDelete('cascade');
             $table->foreign('technician_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('requester_id')->references('id')->on('users')->onDelete('cascade');
         
             $table->timestamps();
         });

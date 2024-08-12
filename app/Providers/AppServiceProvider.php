@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Services\NotificationService;
+use Illuminate\Support\Facades\Gate;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -28,5 +30,6 @@ class AppServiceProvider extends ServiceProvider
             $notificationService = app(NotificationService::class);
             $view->with('notificationCount', $notificationService->getNotificationCount());
         });
+       
     }
 }

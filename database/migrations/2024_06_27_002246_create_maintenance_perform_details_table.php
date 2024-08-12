@@ -15,15 +15,15 @@ return new class extends Migration
     {
         Schema::create('maintenance_perform_details', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('maintenance_performs_id');
+            $table->unsignedBigInteger('maintenance_perform_id');
             $table->unsignedBigInteger('spare_part_id');
-            $table->integer('quantity');
+            $table->integer('quantity')->nullable();
             $table->decimal('price', 10, 2);
             $table->string('currency');
-            $table->date('warranty');
+            $table->string('warranty');
 
             
-            $table->foreign('maintenance_performs_id')->references('id')->on('maintenance_performs')->onDelete('cascade');
+            $table->foreign('maintenance_perform_id')->references('id')->on('maintenance_performs')->onDelete('cascade');
             $table->foreign('spare_part_id')->references('id')->on('spare_parts')->onDelete('cascade');
 
             $table->timestamps();

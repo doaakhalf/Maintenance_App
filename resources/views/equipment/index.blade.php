@@ -15,11 +15,11 @@
         </div>
     @endif
 
-    @if(session('success'))
+    <!-- @if(session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
         </div>
-    @endif
+    @endif -->
   
  
 
@@ -66,6 +66,7 @@
             </thead>
             <tbody>
                 @foreach ($equipment as $equipment_record)
+                
                     <tr>
                         <td>{{ $equipment_record->id }}</td>
                         <td>{{ $equipment_record->name?$equipment_record->name: "N/A" }}</td>
