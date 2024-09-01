@@ -17,6 +17,8 @@
         <div class="card-body">
             <div class="row" >
                 <p class="col-md-12"><strong>Name:</strong> {{ $equipment->name??'N/A' }}</p>
+                <p class="col-md-12"><strong>SN:</strong> {{ $equipment->sn??'N/A' }}</p>
+
                 <div class="col-md-12">
                     <p ><strong>Image:</strong></p>
                 @if ($equipment->image)
@@ -50,7 +52,7 @@
                 <p class="col-md-4"><strong>Department Location:</strong> {{ $equipment->department->location?? 'N/A' }}</p>
                 <p class="col-md-4"><strong>Class:</strong> {{ $equipment->class ?? 'N/A' }}</p>
                 <p class="col-md-4"><strong>Price:</strong> {{ $equipment->price ?? 'N/A' }}</p>
-                <p class="col-md-4"><strong>PPM:</strong> {{ $equipment->ppm ?? 'N/A' }}</p>
+                <p class="col-md-4"><strong>PPM:</strong> {{ $equipment->ppm ?$equipment->ppm . ' ' .$equipment->ppm_unit : 'N/A' }}</p>
                
                 <p class="col-md-4"><strong>Need Calibration:</strong> {{ $equipment->need_calibration ? 'Yes' : 'No' }}</p>
                 @if ($equipment->need_calibration)

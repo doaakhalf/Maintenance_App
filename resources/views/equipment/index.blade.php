@@ -56,10 +56,11 @@
                     <th>ID</th>
                     <th>Equipment Name</th>
                     <th>Equipment Serial Number(sn)</th>
-                    <th>Equipment Model</th>
-
-                    <th>Equipment Class</th>
+                    
                     <th>Department Number</th>
+                    <th>calibration cycle</th>
+
+                    <th>ppm</th>
 
                     <th></th>
                 </tr>
@@ -71,30 +72,24 @@
                         <td>{{ $equipment_record->id }}</td>
                         <td>{{ $equipment_record->name?$equipment_record->name: "N/A" }}</td>
                         <td>{{ $equipment_record->sn }}</td>
-                        <td>{{ $equipment_record->model?$equipment_record->model: "N/A" }}</td>
-                        <td>{{ $equipment_record->class?$equipment_record->class: "N/A" }}</td>
-
                         <td>{{ $equipment_record->department->number}}</td>
+                        <td>{{ $equipment_record->calibration_cycle?$equipment_record->calibration_cycle: "N/A" }}</td>
+                        <td>{{ $equipment_record->ppm?$equipment_record->ppm .' '. $equipment_record->ppm_unit: "N/A" }}</td>
 
                         <td>
                             <!-- <a href="{{ route('admin.equipment.show', $equipment_record->id) }}" class="btn btn-primary btn-sm">View</a> -->
                            
                             <div class="btn-group">
-                                <button type="button" class="btn  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                    <a  class="dropdown-item text-primary" href="{{ route('admin.equipment.edit', $equipment_record) }}" >Edit</a>
-                                    <a class="dropdown-item text-success "  href="{{ route('admin.equipment.show', $equipment_record->id) }}" >View</a>
+                               
+                                    <a  class="dropdown-item text-primary" href="{{ route('admin.equipment.edit', $equipment_record) }}" ><i class="fas fa-pen"></i></a>
+                                    <a class="dropdown-item text-success "  href="{{ route('admin.equipment.show', $equipment_record->id) }}" ><i class="fas fa-eye"></i></a>
                                    
-                                    <div class="dropdown-divider"></div>
-                                  
-                                    <a class="dropdown-item text-danger" onclick="confirmDelete('{{ $equipment_record->id }}')">Delete</a>
+                                   
+                                    <a class="dropdown-item text-danger" onclick="confirmDelete('{{ $equipment_record->id }}')"><i class="fas fa-trash"></i></a>
                                     <form id="delete-form-{{ $equipment_record->id }}" action="{{ route('admin.equipment.destroy', $equipment_record->id) }}" method="POST" style="display: none;">
                                     @csrf
                                     @method('DELETE')
                                     </form>
-                                </div>
                             </div>
 
                         </td>
@@ -106,10 +101,10 @@
                     <th>ID</th>
                     <th>Equipment Name</th>
                     <th>Equipment Serial Number(sn)</th>
-                    <th>Equipment Model</th>
-
-                    <th>Equipment Class</th>
                     <th>Department Number</th>
+                    <th>calibration cycle</th>
+
+                    <th>ppm</th>
                     <th></th>
                 </tr>
             </tfoot>
@@ -121,7 +116,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -129,7 +124,7 @@
                 Are you sure you want to delete this record?
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
             </div>
         </div>

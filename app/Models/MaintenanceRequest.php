@@ -9,7 +9,7 @@ class MaintenanceRequest extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name','request_date','type', 'status', 'equipment_id', 'signed_to_id','requester_id',
+        'name','request_date','type', 'status', 'equipment_id','requester_id','signed_to_id',
     ];
 
     public function equipment()
@@ -28,5 +28,9 @@ class MaintenanceRequest extends Model
     public function maintenancePerforms()
     {
         return $this->hasMany(MaintenancePerform::class);
+    }
+    public function assignments()
+    {
+        return $this->hasMany(MaintenanceRequestAssignments::class);
     }
 }

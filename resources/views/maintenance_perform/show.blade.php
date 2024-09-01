@@ -21,7 +21,8 @@
                 <p class="col-md-12"><strong>Perform Date:</strong> {{ date('d-m-Y',strtotime($maintenance_perform->perform_date)) }}</p>
                 
                 <p class="col-md-12"><strong>Requester:</strong> {{ $maintenance_perform->requester->email }}</p>
-                <p class="col-md-12"><strong>Technician:</strong> {{ $maintenance_perform->technician->email }}</p>
+                <p class="col-md-12"><strong>Assign To:</strong> {{ $maintenance_perform->technician->email }}</p>
+                <p class="col-md-12"><strong>Performed By:</strong> {{ $maintenance_perform->performed_by->email }}</p>
 
 
             </div>
@@ -108,7 +109,20 @@
             </div>
         </div>
         <div class="card-footer">
+        @if($maintenance_perform->status !='Done' &&(Auth::user()->hasRole('Admin') ||Auth::user()->hasRole('Manager')))
+                      <form action="{{ route('admin.maintenance-perform.change-status', $maintenance_perform->id) }}" method="POST">
+                                    @csrf
+                                    @method('PATCH')
+                                    <input class="btn btn-success" type="button" name="status" value="Done" onclick="this.form.submit()">
+                                    <!-- <select name="status" class="custom-select" id="status" onchange="this.form.submit()">
+                                        <option value="Pending"  {{$maintenance_perform->status == 'Pending' ? 'selected' : '' }}>Pending</option>
+                                        <option value="InProgress"  {{ $maintenance_perform->status == 'InProgress' ? 'selected' : '' }}>In Progress</option>
+                                        <option value="Done"  {{ $maintenance_perform->status == 'Done' ? 'selected' : '' }}>Done</option>
+                                    </select> -->
+                                    <input type="hidden" name="status" value="Done">
 
+                                </form>
+           @endif            
         </div>
 
     </div>

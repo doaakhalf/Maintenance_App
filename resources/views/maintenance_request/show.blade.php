@@ -20,6 +20,7 @@
                 
                 <p class="col-md-12"><strong>Status:</strong> {{ $maintenance_request->status }}</p>
                 <p class="col-md-12"><strong>Requester:</strong> {{ $maintenance_request->requester->email }}</p>
+                <p class="col-md-12"><strong>Assign to:</strong> {{ $maintenance_request->assigned_to->email }} {{count($maintenance_request->assignments)>0?$maintenance_request->assignments[0]->assigned_to->email:''}}</p>
             
             
             </div>

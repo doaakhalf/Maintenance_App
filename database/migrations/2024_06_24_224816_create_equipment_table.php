@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('model')->nullable();
             $table->enum('class', ['A', 'B', 'C'])->nullable();
             $table->float('price')->nullable();
-            $table->integer('ppm')->nullable()
-            ->comment('duration of maintenance each quarter 3,6,9');;
+            $table->integer('ppm')->nullable()->comment('duration of maintenance each quarter 3,6,9');
+            $table->enum('ppm_unit', ['Year', 'Month', 'Day'])->nullable();
             $table->boolean('need_calibration')->nullable();
             $table->string('calibration_cycle')->nullable();
             $table->foreignId('department_id')->constrained('departments');

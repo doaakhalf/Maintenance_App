@@ -26,3 +26,7 @@ body{
     pointer-events:none;
     background:#78757582;
     }
+   #notifications {
+        overflow: scroll;
+        height: 400px;
+    }

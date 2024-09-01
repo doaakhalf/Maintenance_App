@@ -16,6 +16,7 @@ class Equipment extends Model
         'class',
         'price',
         'ppm',
+        'ppm_unit',
         'need_calibration',
         'calibration_cycle',
          'department_id'];

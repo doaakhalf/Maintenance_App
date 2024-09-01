@@ -10,7 +10,7 @@ class MaintenancePerform extends Model
     use HasFactory;
     
     protected $fillable = [
-        'maintenance_request_id', 'technician_id','requester_id', 'status', 'service_report', 'perform_date',
+        'maintenance_request_id', 'technician_id','requester_id', 'status', 'service_report', 'perform_date','performed_by_id',
     ];
 
     public function maintenanceRequest()
@@ -26,7 +26,11 @@ class MaintenancePerform extends Model
     {
         return $this->belongsTo(User::class, 'requester_id');
     }
-    
+    public function performed_by()
+    {
+        return $this->belongsTo(User::class, 'performed_by_id');
+    }
+
     public function performDetails()
     {
         return $this->hasMany(MaintenancePerformDetail::class);

@@ -50,7 +50,7 @@ class MaintenanceRequestCreated implements ShouldBroadcast
             'equipment_id' => $this->maintenanceRequest->equipment_id,
             'signed_to_id' => $this->maintenanceRequest->signed_to_id,
             'requester_id' => $this->maintenanceRequest->requester_id,
-            'url'=>route('admin.maintenance-requests.show',$this->maintenanceRequest->id)
+            'url'=>route('admin.maintenance-perform.create',$this->maintenanceRequest->id)
 
         ];
     }

@@ -72,29 +72,39 @@
 
                    
                     <td style="width: 30%;">
-                        <div class="btn-group">
-                            <button type="button" class="btn  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                                <a href="{{ route('admin.maintenance-requests.show', $maintenance_request->id) }}" class="dropdown-item text-primary ">View</a>
+                        <div class="btn-group align-items-center" >
+                          
+                           
+                                <a href="{{ route('admin.maintenance-requests.show', $maintenance_request->id) }}" class="dropdown-item text-primary "><i class="fas fa-eye"></i></a>
 
-                                @if(Auth::user()->hasRole('Admin') ||Auth::user()->hasRole('Manager'))
-                                <a href="{{ route('admin.maintenance-requests.edit', $maintenance_request->id) }}" class="dropdown-item text-warning ">Edit</a>
+                             
+                                @can('update', $maintenance_request)
+                                <a href="{{ route('admin.maintenance-requests.edit', $maintenance_request->id) }}" class="dropdown-item text-warning "><i class="fas fa-pen"></i></a>
+                                 @endcan
+                                @can('delete', $maintenance_request)
+                                 
+                                    <button class="dropdown-item text-danger" onclick="confirmDelete('{{ $maintenance_request->id }}')"><i class="fas fa-trash"></i></button>
+                                    <form id="delete-form-{{ $maintenance_request->id }}" action="{{ route('admin.maintenance-requests.destroy', $maintenance_request->id) }}" method="POST" style="display: none;">
+                                        @csrf
+                                        @method('DELETE')
+                                    </form>
+                                @endcan
+                                @can('forward', $maintenance_request)
 
-                                <button class="dropdown-item text-danger" onclick="confirmDelete('{{ $maintenance_request->id }}')">Delete</button>
-                                <form id="delete-form-{{ $maintenance_request->id }}" action="{{ route('admin.maintenance-requests.destroy', $maintenance_request->id) }}" method="POST" style="display: none;">
-                                    @csrf
-                                    @method('DELETE')
-                                </form>
+                                   <!-- Form for manager or admin to forward to technician -->
+                                        <!-- Forward Icon -->
+                                <a title="foroward Request" href="#" class="forward-icon" data-toggle="modal" data-target="#forwardModal" data-id="{{ $maintenance_request->id }}">
+                                    <i class="fas fa-forward"></i>
+                                </a>
+                                @endcan
+                              
                                
-                                
-                                @endif
-                                @if((Auth::user()->hasRole('Admin') ||Auth::user()->hasRole('Technician')) &&($maintenance_request->status=='Pending'))
-                                <a href="{{ route('admin.maintenance-perform.create', $maintenance_request->id) }}" class="dropdown-item text-success ">Create Maintenance Perform</a>
+                                @can('replyWithPerform', $maintenance_request)
 
-                                @endif
-                            </div>
+                                <a href="{{ route('admin.maintenance-perform.create', $maintenance_request->id) }}" class="dropdown-item text-success " title="Create Maintenance Perform"><i class="fas fa-reply" ></i></a>
+
+                                @endcan
+                           
                         </div>
                     </td>
                 </tr>
@@ -118,7 +128,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -126,10 +136,44 @@
                     Are you sure you want to delete this record?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- foroward modal  -->
+<!-- Modal -->
+<div class="modal fade" id="forwardModal" role="dialog" tabindex="-2" aria-labelledby="forwardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="forwardModalLabel">Forward Maintenance Request</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="forwardForm" action="{{ route('admin.maintenance-requests.forward-request') }}" method="POST">
+                @csrf
+              
+                <div class="modal-body">
+                    <input type="hidden" name="maintenance_request_id" id="maintenanceRequestId">
+                    <div class="form-group">
+                        <label for="technician_id">Select Technician</label>
+                        <select name="technician_id" id="technician_id" class="form-control">
+                            @foreach($technicians as $technician)
+                                <option value="{{ $technician->id }}">{{ $technician->email }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+                    <button type="submit" class="btn btn-primary">Forward</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -174,6 +218,15 @@
 <script>
     $(document).ready(function() {
         $('#departments-table').DataTable();
+
+           // When the forward icon is clicked
+           $('.forward-icon').on('click', function() {
+            var requestId = $(this).data('id');
+            // Set the maintenance_request_id in the modal form
+            $('#maintenanceRequestId').val(requestId);
+            // Show the modal
+            $('#forwardModal').modal('show');
+        });
     });
 
     function confirmDelete(id) {

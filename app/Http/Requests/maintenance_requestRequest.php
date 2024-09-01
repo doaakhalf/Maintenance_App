@@ -24,7 +24,7 @@ class maintenance_requestRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'nullable|string|max:255',
+            'name' => 'required|string|max:255',
             'status' => 'nullable|in:Pending,InProgress,Done',
             'type' => 'required|in:Inner,Outer,Warranty',
             'equipment_id' => 'required|exists:equipment,id',

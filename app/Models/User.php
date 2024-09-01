@@ -96,4 +96,8 @@ class User extends Authenticatable
     {
         return $this->notifications()->whereNull('read_at')->orderBy('created_at', 'desc');
     }
+    public function assignments()
+    {
+        return $this->hasMany(MaintenanceRequestAssignments::class, 'assigned_to_id');
+    }
 }

@@ -9,6 +9,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Models\MaintenanceRequest;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -24,6 +25,11 @@ use Illuminate\Support\Facades\Auth;
 Route::middleware(['auth', 'role:Admin,Manager,Technician'])->prefix('admin')->group(function () {
 
     Route::get('/home', function () {
+        $user=Auth::user();
+        if($user->hasRole('Technician')){
+         return view('dashboard_technician');
+        }
+        else
         return view('dashboard');
     });
     Route::resource('/users', UserController::class)->names([
@@ -90,28 +96,34 @@ Route::middleware(['auth', 'role:Admin,Manager,Technician'])->prefix('admin')->g
         'update' => 'admin.maintenance-requests.update',
         'destroy' => 'admin.maintenance-requests.destroy',
     ])->middleware(['auth', 'role:Admin,Manager,Technician']);
-    Route::get('departments/equipment/{id}', [MaintenanceRequestController::class, 'getDepartmentByEquipment']);
-    Route::patch('/maintenance-requests/{id}/change-status', [MaintenanceRequestController::class, 'changeStatus'])->name('admin.maintenance-requests.change-status');
+    Route::get('/departments/equipment/{id}', [MaintenanceRequestController::class, 'getDepartmentByEquipment']);
+    Route::patch('/maintenance-requests/{id}/change-status', [MaintenanceRequestController::class, 'changeStatus'])->name('admin.maintenance-requests.change-status')->middleware(['auth', 'role:Admin,Manager']);;
+    Route::post('/maintenance-requests/forward-request', [MaintenanceRequestController::class, 'forward_request'])->name('admin.maintenance-requests.forward-request')->middleware(['auth', 'role:Admin,Manager']);;
+   
+   
     // Maintenance Perform
   Route::get('/maintenance-perform', [MaintenancePerformController::class, 'index'])->name('admin.maintenance-perform.index')
-  ->middleware(['auth', 'role:Admin,Technician']);;
+  ->middleware(['auth', 'role:Admin,Technician,Manager']);;
 
 //   show
   Route::get('/maintenance-perform/show/{id}', [MaintenancePerformController::class, 'show'])->name('admin.maintenance-perform.show')
-  ->middleware(['auth', 'role:Admin,Technician']);;
+  ->middleware(['auth', 'role:Admin,Technician,Manager']);;
 
 // create 
     Route::get('/maintenance-perform/{maintenance_request_id}/create', [MaintenancePerformController::class, 'create'])->name('admin.maintenance-perform.create')
-    ->middleware(['auth', 'role:Admin,Technician']);
+    ->middleware(['auth', 'role:Admin,Technician,Manager']);
 
     Route::post('/maintenance-perform/{maintenance_request_id}/store', [MaintenancePerformController::class, 'store'])->name('admin.maintenance-perform.store')
-    ->middleware(['auth', 'role:Admin,Technician']);
+    ->middleware(['auth', 'role:Admin,Technician,Manager']);
 // edit
 Route::get('/maintenance-perform/edit/{id}', [MaintenancePerformController::class, 'edit'])->name('admin.maintenance-perform.edit')
-  ->middleware(['auth', 'role:Admin,Technician']);;
+  ->middleware(['auth', 'role:Admin,Technician,Manager']);;
 
   Route::put('/maintenance-perform/update/{id}', [MaintenancePerformController::class, 'update'])->name('admin.maintenance-perform.update')
-  ->middleware(['auth', 'role:Admin,Technician']);;
+  ->middleware(['auth', 'role:Admin,Technician,Manager']);;
+  Route::delete('/maintenance-perform/delete/{id}', [MaintenancePerformController::class, 'destroy'])->name('admin.maintenance-perform.destroy')
+  ->middleware(['auth', 'role:Admin,Technician,Manager']);;
+  Route::patch('/maintenance-perform/{id}/change-status', [MaintenancePerformController::class, 'changeStatus'])->name('admin.maintenance-perform.change-status')->middleware(['auth', 'role:Admin,Manager']);;
 
 
     })->middleware('auth');
@@ -122,3 +134,21 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+
+// CLEAR CACHE
+Route::get('/artisan/clear-cache', function() {
+    Artisan::call('cache:clear');
+    return "Done - cache are cleared";
+});
+
+// CLEAR ROUTES
+Route::get('/artisan/route-cache', function() {
+    Artisan::call('route:cache');
+    return "Done - routes cache are cleared";
+});
+
+// CLEAR VIEWS
+Route::get('/artisan/views-clear', function() {
+    Artisan::call('view:clear');
+    return "Done - views are cleared from cache";
+});

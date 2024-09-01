@@ -157,9 +157,15 @@ class EquipmentController extends Controller
             if (!$equipment) {
                 return redirect()->route('admin.equipment.index')->with('error', 'Equipment not found');
             }
-          
-            $equipment->delete();
-            return redirect()->route('admin.equipment.index')->with('success', 'Equipment deleted successfully');
+            if (!$equipment->maintenanceRequests()->exists() && !$equipment->calibrationRequests()->exists() && !$equipment->sparePartRequests()->exists() && !$equipment->spareParts()->exists()) {
+                $equipment->delete();
+                return redirect()->route('admin.equipment.index')->with('success', 'Equipment deleted successfully');
+            
+            }
+            else{
+            return redirect()->route('admin.equipment.index')->with('error', 'cant delete this Equipment as it related with other records');
+
+            }
         } catch (\Exception $e) {
             Log::error('Error deleting equipment: ' . $e->getMessage());
             return redirect()->route('admin.equipment.index')->with('error', 'An error occurred while deleting the Equipment');

@@ -1,7 +1,7 @@
 <div class="form-row">
 <div class="form-group col-md-4">
-        <label for="equipment_name">Maintenance Request  Name </label>
-        <input  type="text" id="name" name="name" value="{{ old('name', $maintenance_request->name ?? '') }}" class="form-control" >
+        <label for="equipment_name">Maintenance Request  Name  <span class="text-danger">*</span></label>
+        <input required  type="text" id="name" name="name" value="{{ old('name', $maintenance_request->name ?? '') }}" class="form-control" >
         @if($errors->has('name'))
           <span class="invalid-feedback d-block" role="alert"><strong>{{ $errors->first('name') }}</strong></span>
 
@@ -9,16 +9,19 @@
 </div>
     <div class="form-group col-md-4">
         <label for="equipment_id">Equipment Serial Number (sn) <span class="text-danger">*</span></label>
-        <select onchange="getDepartment(this)" name="equipment_id" class="form-control" id="equipment_id" required >
-        <option value="">Select Equipment Serial Number (sn)</option>
-        @foreach ($equipment as $equipment_record)
-            <option value="{{ $equipment_record->id }}" {{ (old('equipment_id', $maintenance_request->equipment_id ?? '') == $equipment_record->id) ? 'selected' : '' }}>{{ $equipment_record->sn }}</option>
-            @endforeach
-        </select>
-        @if($errors->has('equipment_id'))
-          <span class="invalid-feedback d-block" role="alert"><strong>{{ $errors->first('equipment_id') }}</strong></span>
+        <!-- <select onchange="getDepartment(this)" name="equipment_id" class="form-control" id="equipment_id" required > -->
+        <div class="form-control">
+            <select onchange="getDepartment(this)" name="equipment_id" class=" select2" style="width: 100%;" id="equipment_id" required >
+            <option value="">Select Equipment Serial Number (sn)</option>
+            @foreach ($equipment as $equipment_record)
+                <option value="{{ $equipment_record->id }}" {{ (old('equipment_id', $maintenance_request->equipment_id ?? '') == $equipment_record->id) ? 'selected' : '' }}>{{ $equipment_record->sn }}</option>
+                @endforeach
+            </select>
+            @if($errors->has('equipment_id'))
+            <span class="invalid-feedback d-block" role="alert"><strong>{{ $errors->first('equipment_id') }}</strong></span>
 
-          @endif
+            @endif
+        </div>
     </div>
     <div class="form-group col-md-4">
         <label for="equipment_name">Equipment Name </label>
@@ -100,7 +103,7 @@
       function getDepartment(e){
         equipmentId= $(e).val()
         if (equipmentId) {
-            fetch('/admin/departments/equipment/' + equipmentId)
+            fetch('public/admin/departments/equipment/' + equipmentId)
                 .then(response => response.json())
                 .then(data => {
                     
@@ -133,6 +136,14 @@
                         document.getElementById('equipment_model').value ='';
         }
       }
-        
+      $(document).ready(function() {
+        // Initialize Select2 on the dropdown
+      
+      
+        $('#equipment_id').select2({
+            theme: 'bootstrap4'
+        });
+    });
     </script>
+    
 @endsection

@@ -26,8 +26,11 @@ class EquipmentImport implements ToModel,WithHeadingRow, WithValidation
                 'department_id' => $department->id,
                 'price' => $row['price'],
                 'ppm' => $row['ppm'],
+                'ppm_unit' => $row['ppm_unit'],
                 'need_calibration' => $row['need_calibration'],
                 'calibration_cycle' => $row['calibration_cycle'],
+                'calibration_cycle' => $row['calibration_cycle'],
+
             ]);
         
         
@@ -42,6 +45,8 @@ class EquipmentImport implements ToModel,WithHeadingRow, WithValidation
             '*.department_number' => 'required|exists:departments,number',
             '*.price' => 'nullable|numeric|min:0',
             '*.ppm' => 'nullable|integer|min:0',
+            '*.ppm_unit' => 'nullable|string|min:0|in:Year,Day,Month',
+
             '*.need_calibration' => 'nullable',
             '*.calibration_cycle' => 'nullable|integer|min:0',
         ];

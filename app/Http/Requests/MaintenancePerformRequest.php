@@ -26,6 +26,7 @@ class MaintenancePerformRequest extends FormRequest
         return [
            
             'service_report' => 'required|string|max:255',
+       
 
         ];
     }

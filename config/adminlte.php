@@ -328,7 +328,7 @@ return [
             'icon' => 'far fa-fw fa-file',
             'label' =>1,
             'label_color' => 'success',
-            'can'=>'Admin-Manager'
+            'can'=>'Admin'
         ],
         [
             'text' => 'Equipment',
@@ -336,7 +336,7 @@ return [
             'icon' => 'far fa-fw fa-file',
             'label' =>1,
             'label_color' => 'success',
-            'can'=>'Admin-Manager'
+            'can'=>'Admin'
 
         ],
         
@@ -351,7 +351,7 @@ return [
                     'url' => 'admin/maintenance-requests',
                 ],
                 [
-                    'text' => 'Maintenance Perform',
+                    'text' => 'Done / Performed',
                     'url' => 'admin/maintenance-perform',
                 ],
         ],

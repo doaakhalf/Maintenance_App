@@ -2,26 +2,27 @@
 
 namespace App\Notifications;
 
-use App\Models\MaintenanceRequest;
+use App\Models\MaintenancePerform;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class MaintenanceRequestAssigned extends Notification implements ShouldQueue
+class MaintenancePerformStatusChangedNotify extends Notification implements ShouldQueue
 {
     use Queueable;
-    protected $maintenanceRequest;
+    protected $maintenancePerform;
+
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(MaintenanceRequest $maintenanceRequest)
+    public function __construct(MaintenancePerform $maintenancePerform)
     {
-        $this->maintenanceRequest = $maintenanceRequest;
+        $this->maintenancePerform = $maintenancePerform;
         //
     }
 
@@ -59,14 +60,12 @@ class MaintenanceRequestAssigned extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
         return [
-            'maintenance_request_id' => $this->maintenanceRequest->id,
-            'name' => $this->maintenanceRequest->name?$this->maintenanceRequest->name:'New Maintenance Request',
-            'request_date' => $this->maintenanceRequest->request_date,
-            'equipment_id' => $this->maintenanceRequest->equipment_id,
-            'title' => $this->maintenanceRequest->name?$this->maintenanceRequest->name:'New Maintenance Request',
-            'url'=>route('admin.maintenance-perform.create',$this->maintenanceRequest->id)
-
-
+            'maintenance_perform_id' => $this->maintenancePerform->id,
+            'name' => 'Status Changed of Perform',
+            'perform_date' => $this->maintenancePerform->request_date,
+            'maintenance_request_id' => $this->maintenancePerform->maintenance_request_id,
+            'title' =>'Status Of Maintenance Perform Number '. $this->maintenancePerform->id. 'is changed to '.$this->maintenancePerform->status,
+            'url'=>route('admin.maintenance-perform.show',$this->maintenancePerform->id)
 
 
         ];
@@ -74,13 +73,12 @@ class MaintenanceRequestAssigned extends Notification implements ShouldQueue
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            'maintenance_request_id' => $this->maintenanceRequest->id,
-            'name' =>  $this->maintenanceRequest->name?$this->maintenanceRequest->name:'New Maintenance Request',
-            'request_date' => $this->maintenanceRequest->request_date,
-            'equipment_id' => $this->maintenanceRequest->equipment_id,
-            'title' => $this->maintenanceRequest->name?$this->maintenanceRequest->name:'New Maintenance Request',
-            'url'=>route('admin.maintenance-perform.create',$this->maintenanceRequest->id)
-
+            'maintenance_perform_id' => $this->maintenancePerform->id,
+            'name' => 'Status Changed of Perform',
+            'perform_date' => $this->maintenancePerform->request_date,
+            'maintenance_request_id' => $this->maintenancePerform->maintenance_request_id,
+            'title' =>'Status Of Maintenance Perform Number '. $this->maintenancePerform->id. 'is changed to '.$this->maintenancePerform->status,
+            'url'=>route('admin.maintenance-perform.show',$this->maintenancePerform->id)
 
 
         ]);

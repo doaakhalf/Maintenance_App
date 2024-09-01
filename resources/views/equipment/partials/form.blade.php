@@ -68,11 +68,23 @@
         <label for="price">Price</label>
         <input type="number" name="price" class="form-control" value="{{ old('price', $equipment->price ?? '') }}" >
     </div>
-    <div class="form-group col-md-6">
+    <div class="form-group col-md-3">
         <label for="ppm">PPM</label>
         <input type="number" name="ppm" class="form-control" value="{{ old('ppm', $equipment->ppm ?? '') }}" >
         @if($errors->has('ppm'))
           <span class="invalid-feedback d-block" role="alert"><strong>{{ $errors->first('ppm') }}</strong></span>
+
+          @endif
+    </div>
+    <div class="form-group col-md-3">
+        <label for="class">PPM Unit</label>
+        <select name="ppm_unit" class="form-control" >
+            <option value="Year" {{ (old('class', $equipment->ppm_unit ?? '') == 'Year') ? 'selected' : '' }}>Year</option>
+            <option value="Month" {{ (old('class', $equipment->ppm_unit ?? '') == 'Month') ? 'selected' : '' }}>Month</option>
+            <option value="Day" {{ (old('class', $equipment->ppm_unit ?? '') == 'Day') ? 'selected' : '' }}>Day</option>
+        </select>
+        @if($errors->has('class'))
+          <span class="invalid-feedback d-block" role="alert"><strong>{{ $errors->first('class') }}</strong></span>
 
           @endif
     </div>

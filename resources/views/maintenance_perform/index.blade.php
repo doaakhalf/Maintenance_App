@@ -41,39 +41,45 @@
                 <tr>
                     <td>{{ $maintenance_perform->id }}</td>
                     <td>
-                    <a href="{{ route('admin.maintenance-requests.show', $maintenance_perform->maintenance_request_id) }}" class="text-primay ">Show Maintenance Request </a>
+                    <a href="{{ route('admin.maintenance-requests.show', $maintenance_perform->maintenance_request_id) }}" class="text-primay "> {{$maintenance_perform->maintenanceRequest->name??'Request'}} </a>
 
                     </td>
-                    <td > <span 
+                    <td > 
+                  
+                        <span 
                       @if($maintenance_perform->status=='Pending') class='text-danger'
                       @elseif($maintenance_perform->status=='InProgress') class='text-warning' 
                       @else class='text-success'  @endif
                       >{{ $maintenance_perform->status}} </span>
+                      
                     </td>
+                   
                     <td>{{ $maintenance_perform->perform_date }}</td>
 
                    
                     <td>
                         <div class="btn-group">
-                            <button type="button" class="btn  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                                <a href="{{ route('admin.maintenance-perform.show', $maintenance_perform->id) }}" class="dropdown-item text-primary ">View</a>
-
-                                @if(Auth::user()->hasRole('Admin')  || Auth::user()->id== $maintenance_perform->technician_id) 
-                                <a href="{{ route('admin.maintenance-perform.edit', $maintenance_perform->id) }}" class="dropdown-item text-warning ">Edit</a>
-                                @if($maintenance_perform->status !='InProgress')
-                                    <button class="dropdown-item text-danger" onclick="confirmDelete('{{ $maintenance_perform->id }}')">Delete</button>
+                           
+                            @can('view', $maintenance_perform)
+                           
+                             
+                            <a href="{{ route('admin.maintenance-perform.show', $maintenance_perform->id) }}" class="dropdown-item text-primary "><i class="fas fa-eye"></i></a>
+                            @endcan
+                               @can('update',$maintenance_perform)
+                                <a href="{{ route('admin.maintenance-perform.edit', $maintenance_perform->id) }}" class="dropdown-item text-warning "><i class="fas fa-pen"></i></a>
+                                @endcan
+                               @can('delete',$maintenance_perform)
+                                
+                                    <button class="dropdown-item text-danger" onclick="confirmDelete('{{ $maintenance_perform->id }}')"><i class="fas fa-trash"></i></button>
                                     <form id="delete-form-{{ $maintenance_perform->id }}" action="{{ route('admin.maintenance-perform.destroy', $maintenance_perform->id) }}" method="POST" style="display: none;">
                                         @csrf
                                         @method('DELETE')
                                     </form>
-                                @endif
+                                @endcan
 
-                                @endif
+                             
                                
-                            </div>
+                         
                         </div>
                     </td>
                 </tr>
@@ -97,7 +103,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -105,7 +111,7 @@
                     Are you sure you want to delete this record?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
                 </div>
             </div>
@@ -138,6 +144,33 @@
         var id = $(this).data('id');
         $('#delete-form-' + id).submit();
     });
+    function changeStatusColor(){
+        let status=$('.custom-select');
+       
+        status.each(function (i, obj) {
+            
+            if($(obj).val()=='Pending'){
+        $(obj).addClass('text-danger')
+                $(obj).removeClass('text-success')
+                $(obj).removeClass('text-warning')
+
+        }
+        else if($(obj).val()=='InProgress'){
+            $(obj).removeClass('text-danger')
+            $(obj).removeClass('text-success')
+            $(obj).addClass('text-warning')
+
+        }
+        else{
+            $(obj).removeClass('text-danger')
+            $(obj).addClass('text-success')
+            $(obj).removeClass('text-warning')
+        }
+});
+   
+
+        }
+        changeStatusColor()
 </script>
 
 @stop

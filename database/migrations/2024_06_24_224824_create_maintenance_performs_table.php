@@ -18,6 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('maintenance_request_id');
             $table->unsignedBigInteger('technician_id');
             $table->unsignedBigInteger('requester_id');
+            $table->unsignedBigInteger('performed_by_id');
+
 
             $table->timestamp('perform_date')->useCurrent();
             $table->string('status')->default('Pending');
@@ -26,7 +28,9 @@ return new class extends Migration
             $table->foreign('maintenance_request_id')->references('id')->on('maintenance_requests')->onDelete('cascade');
             $table->foreign('technician_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('requester_id')->references('id')->on('users')->onDelete('cascade');
-        
+            $table->foreign('performed_by_id')->references('id')->on('users')->onDelete('cascade');
+           
+           
             $table->timestamps();
         });
         

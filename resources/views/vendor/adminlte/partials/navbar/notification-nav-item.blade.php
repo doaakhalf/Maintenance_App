@@ -1,7 +1,9 @@
 <li class="nav-item dropdown">
 <a class="nav-link" data-toggle="dropdown" href="#">
 <i class="far fa-bell"></i>
-<span class="badge badge-danger navbar-badge" id="notifications-counter-badge">{{$notificationCount}}</span>
+
+<span style="@if($notificationCount==0) display:none; @else display:block; @endif" class="badge badge-danger navbar-badge" id="notifications-counter-badge">{{$notificationCount}}</span>
+
 </a>
 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="notifications">
    <div class="dropdown-item dropdown-header"><span  id="notifications-counter">{{$notificationCount}}</span><span> Notifications</span></div> 
