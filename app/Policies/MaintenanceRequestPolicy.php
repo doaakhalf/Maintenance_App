@@ -6,7 +6,7 @@ use App\Models\MaintenanceRequest;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class MaintenanceRequestPolicy
+class MaintenanceRequestPolicy extends BacePolicy
 {
     use HandlesAuthorization;
 
@@ -88,29 +88,7 @@ class MaintenanceRequestPolicy
                 ($this->isTechnician($user) && ($maintenanceRequest->signed_to_id == $user->id || $maintenanceRequest->assignments->contains('assigned_to_id', $user->id))));
     }
 
-    /**
-     * Helper method to check if the user has the Admin role.
-     */
-    private function isAdmin(User $user): bool
-    {
-        return $user->hasRole('Admin');
-    }
-
-    /**
-     * Helper method to check if the user has the Manager role.
-     */
-    private function isManager(User $user): bool
-    {
-        return $user->hasRole('Manager');
-    }
-
-    /**
-     * Helper method to check if the user has the Technician role.
-     */
-    private function isTechnician(User $user): bool
-    {
-        return $user->hasRole('Technician');
-    }
+ 
 
     /**
      * Helper method to check if the user is the requester or signed to the maintenance request.

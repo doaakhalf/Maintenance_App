@@ -169,12 +169,15 @@ class MaintenanceRequestController extends Controller
     public function show($id)
     {
         $maintenance_request = MaintenanceRequest::find($id);
+        $technicians = User::whereHas('role', function (Builder $query) {
+            $query->where('role_name', 'Technician');
+        })->get();
         $this->authorize('view', $maintenance_request);
 
         if (!$maintenance_request) {
             return redirect()->route('admin.maintenance-requests.index')->with('error', 'Maintenance Request not found');
         }
-        return view('maintenance_request.show', compact('maintenance_request'));
+        return view('maintenance_request.show', compact('maintenance_request','technicians'));
     }
 
     /**
@@ -263,6 +266,9 @@ class MaintenanceRequestController extends Controller
 
         $maintenanceRequest->status = $request->input('status');
         $maintenanceRequest->save();
+        if($maintenanceRequest->status=='Pending'){
+            $maintenanceRequest->maintenancePerforms()->delete();
+        }
         // Send notification to the technician and save it
         $technician = User::find($maintenanceRequest->signed_to_id);
         $technician->notify(new MaintenanceRequestStatusChangedNotify($maintenanceRequest));

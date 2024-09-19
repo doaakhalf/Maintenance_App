@@ -1,95 +1,52 @@
 import './bootstrap';
 
 
-    
-window.Echo.channel('maintenance-request.' + userId)
-    .listen('.MaintenanceRequestCreated', (data) => {
-        console.log(data,typeof(data));
 
-      
-        const notifications = document.getElementById('notifications');
-        const notification = document.createElement('a');
-        notification.classList.add('dropdown-item')
-        notification.href=data.url
-        console.log(notification.getAttribute("href"));
-      notification.innerHTML=` <i class="fas fa-envelope mr-2"></i> `+data.name +`
-      <span class="float-right text-muted text-sm">3 mins</span>`
-        // notifications.appendChild(notification);
-        $('#notifications > a:first').before(notification)
-      
-       const notifications_counter = document.getElementById('notifications-counter');
-       const notifications_counter_badge = document.getElementById('notifications-counter-badge');
+import './bootstrap';
 
-        notifications_counter.innerText= parseInt(notifications_counter.innerText)+1;
-        notifications_counter_badge.innerText=parseInt(notifications_counter_badge.innerText)+1;
-        notifications_counter_badge.style='display:block'
-    });
-    window.Echo.channel('maintenance-perform.' + userId)
-    .listen('.MaintenancePerformCreated', (data) => {
-        console.log(data,typeof(data));
-       
-        const notifications = document.getElementById('notifications');
-        const notification = document.createElement('a');
-        notification.href=data.url
-        notification.classList.add('dropdown-item')
+// Reusable function to handle notifications
+function handleNotification(channel, eventClass, userId) {
+    window.Echo.channel(channel + '.' + userId)
+        .listen(eventClass, (data) => {
+            console.log('Notification received:', data);
 
-      notification.innerHTML=` <i class="fas fa-envelope mr-2"></i> `+data.name +`
-      <span class="float-right text-muted text-sm">3 mins</span>`
-        // notifications.appendChild(notification);
-        $('#notifications > a:first').before(notification)
-      
-       const notifications_counter = document.getElementById('notifications-counter');
-       const notifications_counter_badge = document.getElementById('notifications-counter-badge');
+            const notifications = document.getElementById('notifications');
+            const notification = document.createElement('a');
+            notification.classList.add('dropdown-item');
+          
+            notification.href = data.url;
+            
+            notification.innerHTML = `<i class="fas fa-envelope mr-2"></i> ${data.name}
+                <span class="float-right text-muted text-sm">3 mins</span>`;
 
-        notifications_counter.innerText= parseInt(notifications_counter.innerText)+1;
-        notifications_counter_badge.innerText=parseInt(notifications_counter_badge.innerText)+1;
-        notifications_counter_badge.style='display:block'
+            $('#notifications > a:first').before(notification);
 
-    });
+            // Update the notification counter
+            updateNotificationCounter();
+        });
+}
 
-    window.Echo.channel('maintenance-request-change-status.' + userId)
-    .listen('.MaintenanceRequestStatusChanged', (data) => {
-        console.log(data,typeof(data));
-       
-        const notifications = document.getElementById('notifications');
-        const notification = document.createElement('a');
-        notification.href=data.url
-        notification.classList.add('dropdown-item')
-        console.log(notification.getAttribute("href"));
+// Function to update notification counters
+function updateNotificationCounter() {
+    const notificationsCounter = document.getElementById('notifications-counter');
+    const notificationsCounterBadge = document.getElementById('notifications-counter-badge');
 
-      notification.innerHTML=` <i class="fas fa-envelope mr-2"></i> `+data.name +`
-      <span class="float-right text-muted text-sm">3 mins</span>`
-        // notifications.appendChild(notification);
-        $('#notifications > a:first').before(notification)
-      
-       const notifications_counter = document.getElementById('notifications-counter');
-       const notifications_counter_badge = document.getElementById('notifications-counter-badge');
+    let counterValue = parseInt(notificationsCounter.innerText) || 0;
 
-        notifications_counter.innerText= parseInt(notifications_counter.innerText)+1;
-        notifications_counter_badge.innerText=parseInt(notifications_counter_badge.innerText)+1;
-        notifications_counter_badge.style='display:block'
+    counterValue++;
+    notificationsCounter.innerText = counterValue;
+    notificationsCounterBadge.innerText = counterValue;
+    notificationsCounterBadge.style.display = 'block';
+}
 
-    });
-    window.Echo.channel('maintenance-perform-change-status.' + userId)
-    .listen('.MaintenancePerformStatusChanged', (data) => {
-        console.log(data,typeof(data));
-       
-        const notifications = document.getElementById('notifications');
-        const notification = document.createElement('a');
-        notification.href=data.url
-        notification.classList.add('dropdown-item')
-        console.log(notification.getAttribute("href"));
+// Listen for notifications related to Maintenance Requests
+handleNotification('maintenance-request', '.MaintenanceRequestCreated', userId);
+handleNotification('maintenance-perform', '.MaintenancePerformCreated', userId);
+handleNotification('maintenance-request-change-status', '.MaintenanceRequestStatusChanged', userId);
+handleNotification('maintenance-perform-change-status', '.MaintenancePerformStatusChanged', userId);
 
-      notification.innerHTML=` <i class="fas fa-envelope mr-2"></i> `+data.name +`
-      <span class="float-right text-muted text-sm">3 mins</span>`
-        // notifications.appendChild(notification);
-        $('#notifications > a:first').before(notification)
-      
-       const notifications_counter = document.getElementById('notifications-counter');
-       const notifications_counter_badge = document.getElementById('notifications-counter-badge');
+// Listen for notifications related to Calibration Requests
+handleNotification('calibration-request', '.CalibrationRequestCreated', userId);
 
-        notifications_counter.innerText= parseInt(notifications_counter.innerText)+1;
-        notifications_counter_badge.innerText=parseInt(notifications_counter_badge.innerText)+1;
-        notifications_counter_badge.style='display:block'
 
-    });
+// 

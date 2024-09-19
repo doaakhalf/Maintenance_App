@@ -2,26 +2,26 @@
 
 namespace App\Notifications;
 
-use App\Models\MaintenanceRequest;
+use App\Models\CalibrationRequest;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class MaintenanceRequestStatusChangedNotify extends Notification implements ShouldQueue
+class CalibrationRequestAssigned extends Notification implements ShouldQueue
 {
     use Queueable;
-    protected $maintenanceRequest;
+    protected $calibrationRequest;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(MaintenanceRequest $maintenanceRequest)
+    public function __construct(CalibrationRequest $calibrationRequest)
     {
-        $this->maintenanceRequest = $maintenanceRequest;
+        $this->calibrationRequest = $calibrationRequest;
         //
     }
 
@@ -59,12 +59,14 @@ class MaintenanceRequestStatusChangedNotify extends Notification implements Shou
     public function toArray($notifiable)
     {
         return [
-            'maintenance_request_id' => $this->maintenanceRequest->id,
-            'name' => 'Status Changed of Request',
-            'request_date' => $this->maintenanceRequest->request_date,
-            'equipment_id' => $this->maintenanceRequest->equipment_id,
-            'title' =>'Status Of Maintenance Request Number '. $this->maintenanceRequest->id. 'is changed to '.$this->maintenanceRequest->status,
-            'url'=>route('admin.maintenance-requests.show',$this->maintenanceRequest->id)
+            'calibration_request_id' => $this->calibrationRequest->id,
+            'name' => $this->calibrationRequest->name?$this->calibrationRequest->name:'New Calibration Request',
+            'request_date' => $this->calibrationRequest->request_date,
+            'equipment_id' => $this->calibrationRequest->equipment_id,
+            'title' => $this->calibrationRequest->name?$this->calibrationRequest->name:'New Calibration Request',
+            'url'=>route('admin.calibration-perform.create',$this->calibrationRequest->id)
+
+
 
 
         ];
@@ -72,13 +74,12 @@ class MaintenanceRequestStatusChangedNotify extends Notification implements Shou
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            'maintenance_request_id' => $this->maintenanceRequest->id,
-            'name' => 'Status Changed of Request',
-            'request_date' => $this->maintenanceRequest->request_date,
-            'equipment_id' => $this->maintenanceRequest->equipment_id,
-            'title' => $this->maintenanceRequest->name?$this->maintenanceRequest->name:'Status Changed of Request',
-            'url'=>route('admin.maintenance-requests.show',$this->maintenanceRequest->id)
-
+            'calibration_request_id' => $this->calibrationRequest->id,
+            'name' => $this->calibrationRequest->name?$this->calibrationRequest->name:'New Calibration Request',
+            'request_date' => $this->calibrationRequest->request_date,
+            'equipment_id' => $this->calibrationRequest->equipment_id,
+            'title' => $this->calibrationRequest->name?$this->calibrationRequest->name:'New Calibration Request',
+            'url'=>route('admin.calibration-perform.create',$this->calibrationRequest->id)
 
         ]);
     }

@@ -343,19 +343,48 @@ return [
         [
             'text' => 'Maintenance',
             'icon' => 'far fa-fw fa-file',
-            
+            'can'=>'Admin-Manager-Technician',
 
             'submenu' => [
                 [
-                    'text' => 'Maintenance Request',
+                    'text' => 'Make Request',
+                    'url' => 'admin/maintenance-requests/create',
+                    'can'=>'Admin-Manager'
+                ],
+                [
+                    'text' => 'All Requests',
                     'url' => 'admin/maintenance-requests',
                 ],
                 [
-                    'text' => 'Done / Performed',
-                    'url' => 'admin/maintenance-perform',
+                    'text' => 'InProgress',
+                    'url' => 'admin/maintenance-perform/InProgress',
                 ],
+                [
+                    'text' => 'Done',
+                    'url' => 'admin/maintenance-perform/Done',
+                ],
+               
+               
+            ],
         ],
-        ],
+        // [
+        //     'text' => 'Calibration',
+        //     'icon' => 'far fa-fw fa-file',
+        //     'can'=>'Admin-Manager-Technician',
+            
+
+        //     'submenu' => [
+        //         [
+        //             'text' => 'Calibration Request',
+        //             'url' => 'admin/calibration-request',
+        //         ],
+        //         [
+        //             'text' => 'Done / Performed',
+        //             'url' => '',
+        //         ],
+        //     ],
+        // ],
+        
         ['header' => 'account_settings'],
         [
             'text' => 'profile',

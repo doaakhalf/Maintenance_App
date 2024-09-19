@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class MaintenancePerformDetail extends Model
 {
     use HasFactory;
-    protected $fillable = ['maintenance_perform_id', 'spare_part_id', 'price', 'currency', 'warranty','quantity'];
+    protected $fillable = ['maintenance_perform_id', 'spare_part_id', 'price', 'currency', 'warranty','quantity','warranty_unit'];
 
     public function maintenancePerform()
     {

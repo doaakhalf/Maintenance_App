@@ -28,5 +28,9 @@ body{
     }
    #notifications {
         overflow: scroll;
-        height: 400px;
+        max-height: 400px;
+    }
+    .highlighted {
+        background-color: green;  /* Or any color you prefer */
+        transition: background-color 0.5s ease;
     }

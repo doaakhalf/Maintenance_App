@@ -29,4 +29,8 @@ class CalibrationRequest extends Model
     {
         return $this->hasMany(calibrationPerform::class);
     }
+    public function assignments()
+    {
+        return $this->hasMany(CalibrationRequestAssignments::class);
+    }
 }

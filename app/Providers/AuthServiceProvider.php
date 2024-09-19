@@ -63,5 +63,11 @@ class AuthServiceProvider extends ServiceProvider
             }
             return false;
         });
+        Gate::define('Admin-Manager-Technician', function () {
+            if (Auth::user()->hasRole('Admin')|| Auth::user()->hasRole('Manager')|| Auth::user()->hasRole('Technician')) {
+                return true;
+            }
+            return false;
+        });
     }
 }

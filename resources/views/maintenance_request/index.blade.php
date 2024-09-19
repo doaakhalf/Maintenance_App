@@ -44,67 +44,71 @@
             </thead>
             <tbody>
                 @foreach ($maintenance_requests as $maintenance_request)
-                <tr>
+                <tr data-id="{{ $maintenance_request->id }}">
                     <td>{{ $maintenance_request->id }}</td>
                     <td>{{ $maintenance_request->name??'N/A' }}</td>
 
                     <td>{{ $maintenance_request->equipment->sn }}</td>
-                    <td > 
-                    @if(Auth::user()->hasRole('Admin') ||Auth::user()->hasRole('Manager'))
-                      <form action="{{ route('admin.maintenance-requests.change-status', $maintenance_request->id) }}" method="POST">
-                                    @csrf
-                                    @method('PATCH')
-                                    <select name="status" class="custom-select" id="status" onchange="this.form.submit()">
-                                        <option value="Pending"  {{$maintenance_request->status == 'Pending' ? 'selected' : '' }}>Pending</option>
-                                        <option value="InProgress"  {{ $maintenance_request->status == 'InProgress' ? 'selected' : '' }}>In Progress</option>
-                                        <option value="Done"  {{ $maintenance_request->status == 'Done' ? 'selected' : '' }}>Done</option>
-                                    </select>
-                                </form>
+                    <td>
+                        @if(Auth::user()->hasRole('Admin') ||Auth::user()->hasRole('Manager'))
+                        <form action="{{ route('admin.maintenance-requests.change-status', $maintenance_request->id) }}" method="POST">
+                            @csrf
+                            @method('PATCH')
+
+                            <select name="status" class="custom-select status" id="status" onchange="this.form.submit()">
+                            @if($maintenance_request->status == 'InProgress')
+                                <option disabled value="InProgress"  {{ $maintenance_request->status == 'InProgress' ? 'selected' : '' }}>In Progress</option>
+                            
+                            @endif
+                                <option value="Pending" data-color="red" {{$maintenance_request->status == 'Pending' ? 'selected' : '' }}>Pending</option>
+                                <option value="Done" data-color="green" {{ $maintenance_request->status == 'Done' ? 'selected' : '' }}>Done</option>
+                            </select>
+                        </form>
                         @else
-                        <span 
-                      @if($maintenance_request->status=='Pending') class='text-danger'
-                      @elseif($maintenance_request->status=='InProgress') class='text-warning' 
-                      @else class='text-success'  @endif
-                      >{{ $maintenance_request->status}} </span>
+                        <span
+                            @if($maintenance_request->status=='Pending') class='text-danger'
+                            @elseif($maintenance_request->status=='InProgress') class='text-warning'
+                            @else class='text-success' @endif
+                            >{{ $maintenance_request->status}} </span>
                         @endif
                     </td>
                     <td>{{ $maintenance_request->type }}</td>
 
-                   
+
                     <td style="width: 30%;">
-                        <div class="btn-group align-items-center" >
-                          
-                           
-                                <a href="{{ route('admin.maintenance-requests.show', $maintenance_request->id) }}" class="dropdown-item text-primary "><i class="fas fa-eye"></i></a>
+                        <div class="btn-group align-items-center">
 
-                             
-                                @can('update', $maintenance_request)
-                                <a href="{{ route('admin.maintenance-requests.edit', $maintenance_request->id) }}" class="dropdown-item text-warning "><i class="fas fa-pen"></i></a>
-                                 @endcan
-                                @can('delete', $maintenance_request)
-                                 
-                                    <button class="dropdown-item text-danger" onclick="confirmDelete('{{ $maintenance_request->id }}')"><i class="fas fa-trash"></i></button>
-                                    <form id="delete-form-{{ $maintenance_request->id }}" action="{{ route('admin.maintenance-requests.destroy', $maintenance_request->id) }}" method="POST" style="display: none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                @endcan
-                                @can('forward', $maintenance_request)
 
-                                   <!-- Form for manager or admin to forward to technician -->
-                                        <!-- Forward Icon -->
-                                <a title="foroward Request" href="#" class="forward-icon" data-toggle="modal" data-target="#forwardModal" data-id="{{ $maintenance_request->id }}">
-                                    <i class="fas fa-forward"></i>
-                                </a>
-                                @endcan
-                              
-                               
-                                @can('replyWithPerform', $maintenance_request)
+                            <a href="{{ route('admin.maintenance-requests.show', $maintenance_request->id) }}" class="dropdown-item text-primary "><i class="fas fa-eye"></i></a>
 
-                                <a href="{{ route('admin.maintenance-perform.create', $maintenance_request->id) }}" class="dropdown-item text-success " title="Create Maintenance Perform"><i class="fas fa-reply" ></i></a>
 
-                                @endcan
-                           
+                            @can('update', $maintenance_request)
+                            <a href="{{ route('admin.maintenance-requests.edit', $maintenance_request->id) }}" class="dropdown-item text-warning "><i class="fas fa-pen"></i></a>
+                            @endcan
+                            @can('delete', $maintenance_request)
+
+                            <button class="dropdown-item text-danger" onclick="confirmDelete('{{ $maintenance_request->id }}')"><i class="fas fa-trash"></i></button>
+                            <form id="delete-form-{{ $maintenance_request->id }}" action="{{ route('admin.maintenance-requests.destroy', $maintenance_request->id) }}" method="POST" style="display: none;">
+                                @csrf
+                                @method('DELETE')
+                            </form>
+                            @endcan
+                            @can('forward', $maintenance_request)
+
+                            <!-- Form for manager or admin to forward to technician -->
+                            <!-- Forward Icon -->
+                            <a title="foroward Request" href="#" class="forward-icon" data-toggle="modal" data-target="#forwardModal" data-id="{{ $maintenance_request->id }}">
+                                <i class="fas fa-forward"></i>
+                            </a>
+                            @endcan
+
+
+                            @can('replyWithPerform', $maintenance_request)
+
+                            <a href="{{ route('admin.maintenance-perform.create', $maintenance_request->id) }}" class="dropdown-item text-success " title="Create Maintenance Perform"><i class="fas fa-reply"></i></a>
+
+                            @endcan
+
                         </div>
                     </td>
                 </tr>
@@ -157,14 +161,14 @@
             </div>
             <form id="forwardForm" action="{{ route('admin.maintenance-requests.forward-request') }}" method="POST">
                 @csrf
-              
+
                 <div class="modal-body">
                     <input type="hidden" name="maintenance_request_id" id="maintenanceRequestId">
                     <div class="form-group">
                         <label for="technician_id">Select Technician</label>
                         <select name="technician_id" id="technician_id" class="form-control">
                             @foreach($technicians as $technician)
-                                <option value="{{ $technician->id }}">{{ $technician->email }}</option>
+                            <option value="{{ $technician->id }}">{{ $technician->email }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -183,31 +187,29 @@
 <!-- DataTables CSS -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
 <style>
-        /* Remove border and customize select appearance */
-        .custom-select {
-            border: none !important;
-            background-color: #f8f9fa;
-            
-            padding: 0.5rem;
-            border-radius: 0;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            width: 100%;
-        }
+    /* Remove border and customize select appearance */
+    .custom-select {
+        border: none !important;
+        background-color: #f8f9fa;
 
-        .custom-select:focus {
-            outline: none;
-            box-shadow: none;
-        }
+        padding: 0.5rem;
+        border-radius: 0;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        width: 100%;
+    }
 
-        /* Customize the dropdown icon */
-        .custom-select::-ms-expand {
-            display: none;
-        }
+    .custom-select:focus {
+        outline: none;
+        box-shadow: none;
+    }
 
-       
-    </style>
+    /* Customize the dropdown icon */
+    .custom-select::-ms-expand {
+        display: none;
+    }
+</style>
 @endsection
 
 @section('js')
@@ -219,14 +221,17 @@
     $(document).ready(function() {
         $('#departments-table').DataTable();
 
-           // When the forward icon is clicked
-           $('.forward-icon').on('click', function() {
+        // When the forward icon is clicked
+        $('.forward-icon').on('click', function() {
             var requestId = $(this).data('id');
             // Set the maintenance_request_id in the modal form
             $('#maintenanceRequestId').val(requestId);
             // Show the modal
             $('#forwardModal').modal('show');
         });
+
+
+       
     });
 
     function confirmDelete(id) {
@@ -238,33 +243,33 @@
         var id = $(this).data('id');
         $('#delete-form-' + id).submit();
     });
-    function changeStatusColor(){
-        let status=$('.custom-select');
-       
-        status.each(function (i, obj) {
-            
-            if($(obj).val()=='Pending'){
-        $(obj).addClass('text-danger')
+
+    function changeStatusColor() {
+        let status = $('.custom-select');
+
+        status.each(function(i, obj) {
+console.log($(obj).val());
+            if ($(obj).val() == 'Pending') {
+                $(obj).addClass('text-danger')
                 $(obj).removeClass('text-success')
                 $(obj).removeClass('text-warning')
 
-        }
-        else if($(obj).val()=='InProgress'){
-            $(obj).removeClass('text-danger')
-            $(obj).removeClass('text-success')
-            $(obj).addClass('text-warning')
+            } else if ($(obj).val() == null) { //inprogress
+                $(obj).removeClass('text-danger')
+                $(obj).removeClass('text-success')
+                $(obj).addClass('text-warning')
+              
 
-        }
-        else{
-            $(obj).removeClass('text-danger')
-            $(obj).addClass('text-success')
-            $(obj).removeClass('text-warning')
-        }
-});
-   
+            } else {
+                $(obj).removeClass('text-danger')
+                $(obj).addClass('text-success')
+                $(obj).removeClass('text-warning')
+            }
+        });
 
-        }
-        changeStatusColor()
+
+    }
+    changeStatusColor()
 </script>
 
 @stop

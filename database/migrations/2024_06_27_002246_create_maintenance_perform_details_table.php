@@ -21,6 +21,7 @@ return new class extends Migration
             $table->decimal('price', 10, 2);
             $table->string('currency');
             $table->string('warranty');
+            $table->enum('warranty_unit', ['Year', 'Month'])->nullable();
 
             
             $table->foreign('maintenance_perform_id')->references('id')->on('maintenance_performs')->onDelete('cascade');

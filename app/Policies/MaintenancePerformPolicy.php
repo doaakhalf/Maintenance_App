@@ -7,7 +7,7 @@ use App\Models\MaintenanceRequest;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class MaintenancePerformPolicy
+class MaintenancePerformPolicy extends BacePolicy
 {
     use HandlesAuthorization;
 
@@ -20,7 +20,7 @@ class MaintenancePerformPolicy
     public function viewAny(User $user)
     {
         //
-        return $user->hasRole('Admin') || $user->hasRole('Manager') || $user->hasRole('Technician');
+        return $this->isAdmin($user) ||$this->isManager($user) || $this->isTechnician($user);
     }
 
     /**
@@ -34,7 +34,7 @@ class MaintenancePerformPolicy
     {
         //
         // Check if the user has an Admin role
-        if ($user->hasRole('Admin')) {
+        if ($this->isAdmin($user)) {
             return true;
         }
 
@@ -44,7 +44,7 @@ class MaintenancePerformPolicy
         }
 
         // Check if the user is a Technician and meets any of the Technician-specific conditions
-        if ($user->hasRole('Technician')) {
+        if ($this->isTechnician($user)) {
             return $maintenancePerform->technician_id == $user->id ||
                 $maintenancePerform->performed_by_id == $user->id ||
                 $maintenancePerform->maintenanceRequest->assignments->contains('assigned_to_id', $user->id);
@@ -63,7 +63,7 @@ class MaintenancePerformPolicy
     public function create(User $user)
     {
         //
-        return $user->hasRole('Admin') || $user->hasRole('Manager') || $user->hasRole('Technician');
+        return $this->isAdmin($user) ||$this->isManager($user) || $this->isTechnician($user);
     }
 
 
@@ -78,7 +78,7 @@ class MaintenancePerformPolicy
     {
         //
         // Check if the user has an Admin role
-        if ($user->hasRole('Admin')) {
+        if ($this->isAdmin($user)) {
             return true;
         }
 
@@ -89,7 +89,7 @@ class MaintenancePerformPolicy
         }
 
         // Check if the user is a Technician and performed the maintenance
-        if ($user->hasRole('Technician')) {
+        if ($this->isTechnician($user)) {
             return $maintenancePerform->performed_by_id == $user->id;
         }
 
@@ -112,7 +112,7 @@ class MaintenancePerformPolicy
         // }
 
         // Check if the user has an Admin role
-        if ($user->hasRole('Admin')) {
+        if ($this->isAdmin($user)) {
             return true;
         }
 
@@ -123,7 +123,7 @@ class MaintenancePerformPolicy
         }
 
         // Check if the user is a Technician and performed the maintenance
-        if ($user->hasRole('Technician')) {
+        if ($this->isTechnician($user)) {
             return $maintenancePerform->performed_by_id == $user->id;
         }
 

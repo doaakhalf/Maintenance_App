@@ -42,6 +42,7 @@ class MaintenancePerformCreated implements ShouldBroadcast
     {
         return [
             'maintenance_perform_id' => $this->maintenancePerform->id,
+            'id' => $this->maintenancePerform->id,
             'perform_date' => $this->maintenancePerform->perform_date,
             'service_report' => $this->maintenancePerform->service_report,
             'status' => $this->maintenancePerform->status,

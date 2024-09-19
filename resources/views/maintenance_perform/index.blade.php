@@ -11,7 +11,12 @@
 
     <div class="card-header d-flex justify-content-between">
         <h3 class="card-title">Maintenance Performs List</h3>
-       
+        @if(Auth::user()->hasRole('Admin') ||Auth::user()->hasRole('Manager'))
+
+        <div class="d-flex ml-auto">
+            <a href="{{ route('admin.maintenance-requests.create') }}" class="btn btn-primary btn-sm   ">Create Maintenance Request</a>
+        </div>
+        @endif
     </div>
     <div class="card-body">
         @if($errors->any())

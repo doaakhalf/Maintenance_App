@@ -21,6 +21,8 @@ return new class extends Migration
             $table->integer('quantity')->nullable();
             $table->string('currency')->nullable();
             $table->date('warranty')->nullable();
+            $table->enum('warranty_unit', ['Year', 'Month'])->nullable();
+
             $table->timestamps();
 
             $table->foreign('spare_part_perform_id')->references('id')->on('spare_part_performs')->onDelete('cascade');

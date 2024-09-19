@@ -46,7 +46,9 @@ class MaintenanceRequestStatusChanged implements ShouldBroadcast
     {
         return [
             'maintenance_request_id' => $this->maintenanceRequest->id,
-            'name' => $this->maintenanceRequest->name?$this->maintenanceRequest->name:'Status Changed of Request',
+            'id' => $this->maintenanceRequest->id,
+
+            'name' =>'Status Changed of Request',
             'request_date' => $this->maintenanceRequest->request_date,
             'type' => $this->maintenanceRequest->type,
             'status' => $this->maintenanceRequest->status,

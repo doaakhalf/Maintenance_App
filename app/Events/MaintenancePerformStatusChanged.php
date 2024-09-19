@@ -60,8 +60,10 @@ class MaintenancePerformStatusChanged implements ShouldBroadcast
     {
         return [
             'maintenance_perform_id' => $this->maintenancePerform->id,
+            'id' => $this->maintenancePerform->id,
+
             'maintenance_request_id' => $this->maintenancePerform->maintenance_request_id,
-            'name' =>'Status Changed of Request',
+            'name' =>'Status Changed of Perform',
             'perform_date' => $this->maintenancePerform->perform_date,
             'status' => $this->maintenancePerform->status,
             'technician_id' => $this->maintenancePerform->technician_id,
