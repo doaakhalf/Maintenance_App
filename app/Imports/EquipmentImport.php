@@ -45,7 +45,7 @@ class EquipmentImport implements ToModel,WithHeadingRow, WithValidation
             '*.department_number' => 'required|exists:departments,number',
             '*.price' => 'nullable|numeric|min:0',
             '*.ppm' => 'nullable|integer|min:0',
-            '*.ppm_unit' => 'nullable|string|min:0|in:Year,Day,Month',
+            '*.ppm_unit' => 'nullable|string|min:0|in:Year,Day,Month|required_with:*.ppm',
 
             '*.need_calibration' => 'nullable',
             '*.calibration_cycle' => 'nullable|integer|min:0',

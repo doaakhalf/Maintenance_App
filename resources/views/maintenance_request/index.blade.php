@@ -3,7 +3,10 @@
 @section('title', 'Maintenance Request')
 
 @section('content_header')
-<h1>Maintenance Requests</h1>
+
+<h1>@if(isset($type))
+    Batch
+@endif Maintenance Requests</h1>
 @stop
 
 @section('content')
@@ -167,6 +170,8 @@
                     <div class="form-group">
                         <label for="technician_id">Select Technician</label>
                         <select name="technician_id" id="technician_id" class="form-control">
+                        <option value="">select User</option>
+
                             @foreach($technicians as $technician)
                             <option value="{{ $technician->id }}">{{ $technician->email }}</option>
                             @endforeach

@@ -3058,6 +3058,8 @@ handleNotification('maintenance-perform-change-status', '.MaintenancePerformStat
 
 // Listen for notifications related to Calibration Requests
 handleNotification('calibration-request', '.CalibrationRequestCreated', userId);
+handleNotification('assign-batch-maintenance-requests', '.AssignBatchRequest', userId);
+handleNotification('notify-ppm-equipment', '.EquipmentPPMDueEvent', userId);
 
 //
 

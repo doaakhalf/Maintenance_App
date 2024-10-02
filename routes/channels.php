@@ -39,3 +39,14 @@ Broadcast::channel('calibration-request.{id}', function ($user, $id) {
     
     return (int) $user->id === (int) $id;
 });
+
+// Assign Batch requests
+// Calibration
+
+Broadcast::channel('assign-batch-maintenance-requests.{id}', function ($user, $id) {
+    
+    return (int) $user->id === (int) $id;
+});
+Broadcast::channel('notify-ppm-equipment.{userId}', function ($user, $userId) {
+    return (int) $user->id === (int) $userId;
+});

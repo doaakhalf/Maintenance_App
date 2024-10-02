@@ -21,25 +21,31 @@
 
         {{-- Configured right links --}}
         @each('adminlte::partials.navbar.menu-item', $adminlte->menu('navbar-right'), 'item')
-
+      
+        @can('Admin-Manager')
+        <!-- ppm icon -->
+        @include('adminlte::partials.navbar.ppm-nav-item')
+        <!-- ppm icon -->
+        @endcan
         <!-- notification alert -->
         @include('adminlte::partials.navbar.notification-nav-item')
 
-        <!-- notification alert -->
+
+
         {{-- User menu link --}}
         @if(Auth::user())
-            @if(config('adminlte.usermenu_enabled'))
-                @include('adminlte::partials.navbar.menu-item-dropdown-user-menu')
-            @else
-                @include('adminlte::partials.navbar.menu-item-logout-link')
-            @endif
+        @if(config('adminlte.usermenu_enabled'))
+        @include('adminlte::partials.navbar.menu-item-dropdown-user-menu')
+        @else
+        @include('adminlte::partials.navbar.menu-item-logout-link')
+        @endif
         @endif
 
         {{-- Right sidebar toggler link --}}
         @if(config('adminlte.right_sidebar'))
-            @include('adminlte::partials.navbar.menu-item-right-sidebar-toggler')
+        @include('adminlte::partials.navbar.menu-item-right-sidebar-toggler')
         @endif
-      
+
     </ul>
 
 </nav>

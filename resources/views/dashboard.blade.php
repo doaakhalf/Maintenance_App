@@ -11,11 +11,11 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-3 col-6">
-
+            <a href="{{route('admin.maintenance-requests.create')}}" class="text-white">
                 <div class="small-box bg-info center-vertical h-100">
                     <div class="inner">
                     <p>
-                    <a href="{{route('admin.maintenance-requests.create')}}" class="text-white">create Maintenance Request <i class="fas fa-cog"></i></a>
+                    create Maintenance Request <i class="fas fa-cog"></i>
                     </p>
                        
                     </div>
@@ -24,6 +24,7 @@
                     </div>
                    
                 </div>
+            </a>
             </div>
 
            

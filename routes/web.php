@@ -73,7 +73,8 @@ Route::middleware(['auth', 'role:Admin,Manager,Technician'])->prefix('admin')->g
         'edit' => 'admin.departments.edit',
         'update' => 'admin.departments.update',
         'destroy' => 'admin.departments.destroy',
-    ]);
+    ])->middleware(['auth', 'role:Admin,Manager']);;
+    Route::post('/departments/{id}/assign', [App\Http\Controllers\DepartmentController::class, 'assignEquipmentOfDepToUser'])->name('admin.departments.assign');
 
     // Equipment
     Route::resource('/equipment', EquipmentController::class)->names([
@@ -84,8 +85,11 @@ Route::middleware(['auth', 'role:Admin,Manager,Technician'])->prefix('admin')->g
         'edit' => 'admin.equipment.edit',
         'update' => 'admin.equipment.update',
         'destroy' => 'admin.equipment.destroy',
-    ]);
-    Route::post('/equipment/import]', [App\Http\Controllers\EquipmentController::class, 'import'])->name('admin.equipment.import');
+    ])->middleware(['auth', 'role:Admin,Manager']);;
+    Route::post('/equipment/import', [App\Http\Controllers\EquipmentController::class, 'import'])->name('admin.equipment.import');
+    Route::post('/equipment/assign', [App\Http\Controllers\EquipmentController::class, 'assignToUser'])->name('admin.equipment.assign');
+    
+    Route::get('/equipment/ppm/all', [App\Http\Controllers\EquipmentController::class, 'ppm_equip'])->name('admin.equipment.ppm')->middleware(['auth', 'role:Admin,Manager']);
 
     // Maintenance Request
     Route::resource('/maintenance-requests', MaintenanceRequestController::class)->names([
@@ -140,6 +144,10 @@ Route::middleware(['auth', 'role:Admin,Manager,Technician'])->prefix('admin')->g
     ])->middleware(['auth', 'role:Admin,Manager,Technician']);
     Route::patch('/calibration-request/{id}/change-status', [CalibrationRequestController::class, 'changeStatus'])->name('admin.calibration-request.change-status')->middleware(['auth', 'role:Admin,Manager']);;
     Route::post('/calibration-request/forward-request', [CalibrationRequestController::class, 'forward_request'])->name('admin.calibration-request.forward-request')->middleware(['auth', 'role:Admin,Manager']);;
+
+
+    // patch requests page
+    Route::get('/maintenance-requests/{batch_id}/notification/list', [App\Http\Controllers\MaintenanceRequestController::class, 'notification'])->name('admin.requests.patch.list');
 
 })->middleware('auth');
 

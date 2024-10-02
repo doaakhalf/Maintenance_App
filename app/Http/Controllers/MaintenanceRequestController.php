@@ -278,4 +278,29 @@ class MaintenanceRequestController extends Controller
 
         return redirect()->route('admin.maintenance-requests.index')->with('success', 'Status updated successfully.');
     }
+    public function notification(Request $request, $batch_id)
+    {
+        $type='Batch';
+        $maintenance_requests=MaintenanceRequest::query()->where('batch_id',$batch_id)
+       ->get();
+       $user = Auth::user();
+        $technicians = User::whereHas('role', function (Builder $query) {
+            $query->where('role_name', 'Technician');
+        })->get();
+        if($maintenance_requests &&($user->hasRole('Admin')||$user->id==$maintenance_requests[0]->signed_to_id )){
+            return view('maintenance_request.index', compact('maintenance_requests', 'technicians','type'));
+        }
+        else{
+            if(!$maintenance_requests){
+                return redirect()->back()->with('error', 'Batch Not Exist');
+
+
+            }
+            else{
+                return response()->json(['error' => 'Unauthorized.'], 403);
+            }
+        }
+    }
+
+    
 }
