@@ -367,23 +367,35 @@ return [
                
             ],
         ],
-        // [
-        //     'text' => 'Calibration',
-        //     'icon' => 'far fa-fw fa-file',
-        //     'can'=>'Admin-Manager-Technician',
+        [
+            'text' => 'Calibration',
+            'icon' => 'far fa-fw fa-file',
+            'can'=>'Admin-Manager-Technician',
             
 
-        //     'submenu' => [
-        //         [
-        //             'text' => 'Calibration Request',
-        //             'url' => 'admin/calibration-request',
-        //         ],
-        //         [
-        //             'text' => 'Done / Performed',
-        //             'url' => '',
-        //         ],
-        //     ],
-        // ],
+            'submenu' => [
+               
+                
+                [
+                    'text' => 'Make Request',
+                    'url' => 'admin/calibration-request/create',
+                    'can'=>'Admin-Manager'
+                ],
+                [
+                    'text' => 'All Requests',
+                    'url' => 'admin/calibration-request',
+                ],
+                [
+                    'text' => 'InProgress',
+                    'url' => 'admin/calibration-perform/InProgress',
+                ],
+                [
+                    'text' => 'Done',
+                    'url' => 'admin/calibration-perform/Done',
+                ],
+               
+            ],
+        ],
         
         ['header' => 'account_settings'],
         [

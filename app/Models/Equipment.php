@@ -19,6 +19,7 @@ class Equipment extends Model
         'ppm_unit',
         'need_calibration',
         'calibration_cycle',
+        'calibration_unit',
          'department_id'];
 
     public function department()

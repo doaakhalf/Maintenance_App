@@ -56,8 +56,12 @@
                             @method('DELETE')
                         </form>
                         @can('Admin-Manager')
-                        <!-- Button to open the modal for assigning equipment -->
-                        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#assignModal-{{ $department->id }}">Assign Equipment</button>
+                        <!-- Button to open the modal for assigning equipment for maintenance -->
+                        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#assignModal-{{ $department->id }}">Assign Equipment For Maintenance</button>
+                        @endcan
+                        @can('Admin-Manager')
+                        <!-- Button to open the modal for assigning equipment  for calibration-->
+                        <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#assignCalibrationModal-{{ $department->id }}">Assign Equipment For Calibration</button>
                         @endcan
                     </td>
                 </tr>
@@ -74,6 +78,71 @@
                              
                             </div>
                             <form action="{{ route('admin.departments.assign',$department->id) }}" method="POST">
+                                @csrf
+                                <div class="modal-body">
+                                   
+
+                                    <div class="form-group">
+                                        <label for="user_id">Select Technician</label>
+                                        <select name="signed_to_id" class="form-control" required>
+                                        <option value="">select User</option>
+                                            @foreach ($technicians as $technician)
+                                            <option value="{{ $technician->id }}">{{ $technician->email }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                            <label for="user_id">Request Name <span class="text-danger">*</span></label>
+                            <input name="name" type="text" required id="name" class="form-control">
+
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="signed_to_id">Type <span class="text-danger">*</span></label>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="Inner" name="type" id="type1" required>
+                                <label class="form-check-label" for="flexRadioDefault1">
+                                    Inner
+                                </label>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="Outer" name="type" id="type2" required>
+                                <label class="form-check-label" for="flexRadioDefault2">
+                                    Outer
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="Warranty" name="type" id="type3" required>
+                                <label class="form-check-label" for="flexRadioDefault2">
+                                    Warranty
+                                </label>
+                            </div>
+
+                        </div>
+                                   
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Assign</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                  <!-- Modal for selecting the technician to assign equipment to for calibration -->
+                  <div class="modal fade" id="assignCalibrationModal-{{ $department->id }}" tabindex="-1" aria-labelledby="assignModalLabel-{{ $department->id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                             
+                                <h5 class="modal-title" id="assignCalibrationModalLabel-{{ $department->id }}">Assign Equipment of Department Number {{ $department->number }}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                             
+                            </div>
+                            <form action="{{ route('admin.departments.assign-calibration',$department->id) }}" method="POST">
                                 @csrf
                                 <div class="modal-body">
                                    

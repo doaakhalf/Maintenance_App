@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CalibrationPerformController;
 use App\Http\Controllers\CalibrationRequestController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DepartmentController;
@@ -75,6 +76,7 @@ Route::middleware(['auth', 'role:Admin,Manager,Technician'])->prefix('admin')->g
         'destroy' => 'admin.departments.destroy',
     ])->middleware(['auth', 'role:Admin,Manager']);;
     Route::post('/departments/{id}/assign', [App\Http\Controllers\DepartmentController::class, 'assignEquipmentOfDepToUser'])->name('admin.departments.assign');
+    Route::post('/departments/{id}/assign-calibration', [App\Http\Controllers\DepartmentController::class, 'assignEquipmentOfDepToUserForCalibration'])->name('admin.departments.assign-calibration');
 
     // Equipment
     Route::resource('/equipment', EquipmentController::class)->names([
@@ -104,6 +106,8 @@ Route::middleware(['auth', 'role:Admin,Manager,Technician'])->prefix('admin')->g
     Route::get('/departments/equipment/{id}', [MaintenanceRequestController::class, 'getDepartmentByEquipment']);
     Route::patch('/maintenance-requests/{id}/change-status', [MaintenanceRequestController::class, 'changeStatus'])->name('admin.maintenance-requests.change-status')->middleware(['auth', 'role:Admin,Manager']);;
     Route::post('/maintenance-requests/forward-request', [MaintenanceRequestController::class, 'forward_request'])->name('admin.maintenance-requests.forward-request')->middleware(['auth', 'role:Admin,Manager']);;
+    // Batch requests page
+    Route::get('/maintenance-requests/{batch_id}/notification/list', [MaintenanceRequestController::class, 'notification'])->name('admin.requests.patch.list');
 
 
     // Maintenance Perform
@@ -144,11 +148,36 @@ Route::middleware(['auth', 'role:Admin,Manager,Technician'])->prefix('admin')->g
     ])->middleware(['auth', 'role:Admin,Manager,Technician']);
     Route::patch('/calibration-request/{id}/change-status', [CalibrationRequestController::class, 'changeStatus'])->name('admin.calibration-request.change-status')->middleware(['auth', 'role:Admin,Manager']);;
     Route::post('/calibration-request/forward-request', [CalibrationRequestController::class, 'forward_request'])->name('admin.calibration-request.forward-request')->middleware(['auth', 'role:Admin,Manager']);;
+    // Batch requests page
+    Route::get('/calibration-request/{batch_id}/notification/list', [CalibrationRequestController::class, 'notification'])->name('admin.calibration_request.batch.list');
 
 
-    // patch requests page
-    Route::get('/maintenance-requests/{batch_id}/notification/list', [App\Http\Controllers\MaintenanceRequestController::class, 'notification'])->name('admin.requests.patch.list');
+    // calibration Perform
+    Route::get('/calibration-perform/{status?}', [CalibrationPerformController::class, 'index'])->name('admin.calibration-perform.index')
+        ->middleware(['auth', 'role:Admin,Technician,Manager']);;
 
+    //   show
+    Route::get('/calibration-perform/show/{id}', [CalibrationPerformController::class, 'show'])->name('admin.calibration-perform.show')
+        ->middleware(['auth', 'role:Admin,Technician,Manager']);;
+
+    // create 
+    Route::get('/calibration-perform/{maintenance_request_id}/create', [CalibrationPerformController::class, 'create'])->name('admin.calibration-perform.create')
+        ->middleware(['auth', 'role:Admin,Technician,Manager']);
+
+    Route::post('/calibration-perform/{maintenance_request_id}/store', [CalibrationPerformController::class, 'store'])->name('admin.calibration-perform.store')
+        ->middleware(['auth', 'role:Admin,Technician,Manager']);
+    // edit
+    Route::get('/calibration-perform/edit/{id}', [CalibrationPerformController::class, 'edit'])->name('admin.calibration-perform.edit')
+        ->middleware(['auth', 'role:Admin,Technician,Manager']);;
+
+    Route::put('/calibration-perform/update/{id}', [CalibrationPerformController::class, 'update'])->name('admin.calibration-perform.update')
+        ->middleware(['auth', 'role:Admin,Technician,Manager']);;
+    Route::delete('/calibration-perform/delete/{id}', [CalibrationPerformController::class, 'destroy'])->name('admin.calibration-perform.destroy')
+        ->middleware(['auth', 'role:Admin,Technician,Manager']);;
+    Route::patch('/calibration-perform/{id}/change-status', [CalibrationPerformController::class, 'changeStatus'])->name('admin.calibration-perform.change-status')->middleware(['auth', 'role:Admin,Manager']);
+
+
+   
 })->middleware('auth');
 
 

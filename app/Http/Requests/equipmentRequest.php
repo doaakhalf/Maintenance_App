@@ -32,8 +32,12 @@ class equipmentRequest extends FormRequest
             'department_id' => 'required|exists:departments,id',
             'price' => 'nullable|numeric|min:0',
             'ppm' => 'nullable|integer|min:0',
+            '*.ppm_unit' => 'nullable|string|min:0|in:Year,Day,Month|required_with:*.ppm',
+
             'calibration' => 'nullable|boolean',
             'calibration_cycle' => 'nullable|integer|min:0|required_if:calibration,true',
+            '*.calibration_unit' => 'nullable|string|min:0|in:Year,Day,Month|required_with:*.calibration_cycle',
+
         ];
     }
 }

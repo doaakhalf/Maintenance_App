@@ -3060,6 +3060,9 @@ handleNotification('maintenance-perform-change-status', '.MaintenancePerformStat
 handleNotification('calibration-request', '.CalibrationRequestCreated', userId);
 handleNotification('assign-batch-maintenance-requests', '.AssignBatchRequest', userId);
 handleNotification('notify-ppm-equipment', '.EquipmentPPMDueEvent', userId);
+handleNotification('calibration-request-change-status', '.CalibrationRequestStatusChanged', userId);
+handleNotification('calibration-perform-change-status', '.CalibrationPerformStatusChanged', userId);
+handleNotification('calibration-perform', '.CalibrationPerformCreated', userId);
 
 //
 

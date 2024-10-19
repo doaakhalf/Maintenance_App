@@ -9,7 +9,7 @@
     </div>
     <div class="form-group col-md-6">
         <label for="serial_number">Serial Number (sn) <span class="text-danger">*</span></label>
-        <input type="text" name="sn" class="form-control" value="{{ old('sn', $equipment->sn ?? '') }}" >
+        <input type="text" name="sn" class="form-control" value="{{ old('sn', $equipment->sn ?? '') }}" required >
         @if($errors->has('sn'))
           <span class="invalid-feedback d-block" role="alert"><strong>{{ $errors->first('sn') }}</strong></span>
 
@@ -50,11 +50,13 @@
           @endif
     </div>
     <div class="form-group col-md-6">
-        <label for="department_id">Department Number</label>
-        <select name="department_id" class="form-control" >
+        <label for="department_id">Department Number <span class="text-danger">*</span></label>
+        <select name="department_id" class="form-control" required >
+            <option value="">Select department</option>
+            
             @foreach ($departments as $department)
-            <option value="{{ $department->id }}" {{ (old('department_id', $equipment->department_id ?? '') == $department->id) ? 'selected' : '' }}>{{ $department->number }}</option>
-            @endforeach
+                <option value="{{ $department->id }}" {{ (old('department_id', $equipment->department_id ?? '') == $department->id) ? 'selected' : '' }}>{{ $department->number }}</option>
+                @endforeach
         </select>
         @if($errors->has('department_id'))
           <span class="invalid-feedback d-block" role="alert"><strong>{{ $errors->first('department_id') }}</strong></span>
@@ -103,11 +105,25 @@
           @endif
     </div>
 
-    <div class="form-group col-md-6">
+    <div class="form-group col-md-3">
         <label for="calibration_cycle">Calibration Cycle</label>
         <input type="number "id="calibration_cycle" name="calibration_cycle" class="form-control {{isset($equipment)? (old('need_calibration', $equipment->need_calibration ?? '') ? '' : 'disable'):'' }}" value="{{ old('calibration_cycle', $equipment->calibration_cycle ?? '') }}">
         @if($errors->has('calibration_cycle'))
           <span class="invalid-feedback d-block" role="alert"><strong>{{ $errors->first('calibration_cycle') }}</strong></span>
+
+          @endif
+    </div>
+    <div class="form-group col-md-3">
+        <label for="class">Calibration Unit</label>
+        <select name="calibration_unit" class="form-control" >
+        <option value="">Select Unit</option>
+
+            <option value="Year" {{ (old('class', $equipment->calibration_unit ?? '') == 'Year') ? 'selected' : '' }}>Year</option>
+            <option value="Month" {{ (old('class', $equipment->calibration_unit ?? '') == 'Month') ? 'selected' : '' }}>Month</option>
+            <option value="Day" {{ (old('class', $equipment->calibration_unit ?? '') == 'Day') ? 'selected' : '' }}>Day</option>
+        </select>
+        @if($errors->has('class'))
+          <span class="invalid-feedback d-block" role="alert"><strong>{{ $errors->first('class') }}</strong></span>
 
           @endif
     </div>

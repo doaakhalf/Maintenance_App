@@ -54,7 +54,7 @@ class AssignBatchRequest implements ShouldBroadcast
             'name' => $this->lastMaintenanceRequest->name .'+ ('. count($this->maintenanceRequestsIds) .' Equipment)' ,
             'signed_to_id' => $this->lastMaintenanceRequest->signed_to_id,
             'requester_id' => $this->lastMaintenanceRequest->requester_id,
-            'url'=>route('admin.requests.patch.list',$this->lastMaintenanceRequest->batch_id),
+            'url'=>route('admin.requests.batch.list',$this->lastMaintenanceRequest->batch_id),
 
 
         ];

@@ -14,7 +14,7 @@
         @if(Auth::user()->hasRole('Admin') ||Auth::user()->hasRole('Manager'))
 
         <div class="d-flex ml-auto">
-            <a href="{{ route('admin.calibration-request.create') }}" class="btn btn-primary btn-sm   ">Create Maintenance Request</a>
+            <a href="{{ route('admin.calibration-request.create') }}" class="btn btn-primary btn-sm   ">Create Calibration Request</a>
         </div>
         @endif
     </div>
@@ -101,7 +101,7 @@
                                
                                 @can('replyWithPerform', $calibration_request)
 
-                                <a href="{{ route('admin.maintenance-perform.create', $calibration_request->id) }}" class="dropdown-item text-success " title="Create Maintenance Perform"><i class="fas fa-reply" ></i></a>
+                                <a href="{{ route('admin.calibration-perform.create', $calibration_request->id) }}" class="dropdown-item text-success " title="Create Calibration Perform"><i class="fas fa-reply" ></i></a>
 
                                 @endcan
                            
@@ -150,7 +150,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="forwardModalLabel">Forward Maintenance Request</h5>
+                <h5 class="modal-title" id="forwardModalLabel">Forward Calibration Request</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -159,7 +159,7 @@
                 @csrf
               
                 <div class="modal-body">
-                    <input type="hidden" name="maintenance_request_id" id="maintenanceRequestId">
+                    <input type="hidden" name="calibration_request_id" id="calibrationRequestId">
                     <div class="form-group">
                         <label for="technician_id">Select Technician</label>
                         <select name="technician_id" id="technician_id" class="form-control">
@@ -224,8 +224,8 @@
            // When the forward icon is clicked
            $('.forward-icon').on('click', function() {
             var requestId = $(this).data('id');
-            // Set the maintenance_request_id in the modal form
-            $('#maintenanceRequestId').val(requestId);
+            // Set the calibration_request_id in the modal form
+            $('#calibrationRequestId').val(requestId);
             // Show the modal
             $('#forwardModal').modal('show');
         });

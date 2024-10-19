@@ -2,7 +2,13 @@
 
 namespace App\Providers;
 
+use App\Models\CalibrationPerform;
+use App\Models\CalibrationRequest;
+use App\Models\MaintenancePerform;
 use App\Models\MaintenanceRequest;
+use App\Policies\CalibrationPerformPolicy;
+use App\Policies\CalibrationRequestPolicy;
+use App\Policies\MaintenancePerformPolicy;
 use App\Policies\MaintenanceRequestPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -18,6 +24,12 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
         MaintenanceRequest::class => MaintenanceRequestPolicy::class,
+        MaintenancePerform::class => MaintenancePerformPolicy::class,
+        CalibrationRequest::class => CalibrationRequestPolicy::class,
+        CalibrationPerform::class => CalibrationPerformPolicy::class,
+
+       
+
     ];
 
     /**

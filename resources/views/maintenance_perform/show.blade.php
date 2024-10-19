@@ -52,6 +52,8 @@
 
         <div class="card-body">
             <div class="row">
+            <p class="col-md-12"><strong>Equipment SN:</strong> {{ $maintenance_perform->maintenanceRequest->equipment->sn??'N/A' }}</p>
+
                 <p class="col-md-12"><strong>Equipment Name:</strong> {{ $maintenance_perform->maintenanceRequest->equipment->name??'N/A' }}</p>
                 <div class="col-md-12">
                     <p><strong>Image:</strong></p>

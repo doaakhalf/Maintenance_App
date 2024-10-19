@@ -57,15 +57,15 @@ class MaintenancePerformController extends Controller
         else {
             $maintenance_performs = MaintenancePerform::query();
         }
-        
+
         // Apply status filtering if a status is provided
         if (!empty($status)) {
             $maintenance_performs->where('status', $status);
         }
-        
+
         // Get the final result
         $maintenance_performs = $maintenance_performs->get();
-        
+
 
         return view('maintenance_perform.index', compact('maintenance_performs'));
         //
@@ -81,17 +81,19 @@ class MaintenancePerformController extends Controller
         //
         $maintenance_request = MaintenanceRequest::find($id);
         $user = Auth::user();
+
+
         $technicians = User::whereHas('role', function (Builder $query) {
             $query->where('role_name', 'Technician');
         })->get();
         if (!$maintenance_request) {
             return redirect()->route('admin.maintenance-requests.index')->with('error', 'Maintenance request not found');
         }
-        if ($maintenance_request->status == 'Pending' && ($user->hasRole('Admin') || ($user->hasRole('Manager') && $maintenance_request->signed_to_id == $user->id || $user->hasRole('Manager') && $maintenance_request->requester_id == $user->id  || ($user->hasRole('Technician') && ($maintenance_request->signed_to_id == $user->id || $maintenance_request->assignments[0]->assigned_to_id == $user->id))))) {
-            return view('maintenance_perform.create', compact('maintenance_request', 'technicians'));
-        } else {
-            abort(403, 'Unauthorized action.');
-        }
+        // Authorize the user with the policy
+        $this->authorize('replyWithPerform', $maintenance_request);
+
+
+        return view('maintenance_perform.create', compact('maintenance_request', 'technicians'));
     }
 
     /**
@@ -147,12 +149,12 @@ class MaintenancePerformController extends Controller
                     ]);
                 }
             }
-              // change maintenance request status
-              $maintenance_request->status = 'InProgress';
-              $maintenance_request->save();
+            // change maintenance request status
+            $maintenance_request->status = 'InProgress';
+            $maintenance_request->save();
             // Commit the transaction
             DB::commit();
-          
+
 
             // Send notification to the requester and save it
             $requester = User::find($maintenance_request->requester_id);
@@ -270,7 +272,7 @@ class MaintenancePerformController extends Controller
 
             // Commit the transaction
             DB::commit();
-        
+
             return redirect()->route('admin.maintenance-perform.index')
                 ->with('success', 'Maintenance perform updated successfully.');
         } catch (\Exception $e) {
@@ -312,13 +314,10 @@ class MaintenancePerformController extends Controller
         $maintenancePerform->save();
         // change MaintenanceRequest status to done
         $maintenance_request = MaintenanceRequest::find($maintenancePerform->maintenance_request_id);
-        if($request->status=='Pending'){
+        if ($request->status == 'Pending') {
             $maintenance_request->status = 'Pending';
-
-        }
-        else{
+        } else {
             $maintenance_request->status = 'Done';
-
         }
 
         $maintenance_request->save();
