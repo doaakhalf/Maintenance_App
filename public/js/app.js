@@ -3025,6 +3025,7 @@ __webpack_require__.r(__webpack_exports__);
 
 // Reusable function to handle notifications
 function handleNotification(channel, eventClass, userId) {
+  console.log('channel:', channel, eventClass, userId);
   window.Echo.channel(channel + '.' + userId).listen(eventClass, function (data) {
     console.log('Notification received:', data);
     var notifications = document.getElementById('notifications');
@@ -3063,6 +3064,7 @@ handleNotification('notify-ppm-equipment', '.EquipmentPPMDueEvent', userId);
 handleNotification('calibration-request-change-status', '.CalibrationRequestStatusChanged', userId);
 handleNotification('calibration-perform-change-status', '.CalibrationPerformStatusChanged', userId);
 handleNotification('calibration-perform', '.CalibrationPerformCreated', userId);
+handleNotification('assign-batch-calibration-requests', '.AssignCalibrationBatchRequest', userId);
 
 //
 

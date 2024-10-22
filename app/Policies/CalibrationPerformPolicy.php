@@ -33,6 +33,7 @@ class CalibrationPerformPolicy extends BacePolicy
     public function view(User $user, CalibrationPerform $calibrationPerform)
     {
         //
+       
         // Check if the user has an Admin role
         if ($this->isAdmin($user)) {
             return true;

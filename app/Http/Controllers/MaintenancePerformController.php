@@ -180,10 +180,11 @@ class MaintenancePerformController extends Controller
     {
         //
         $maintenance_perform = MaintenancePerform::find($id);
-        $this->authorize('view', $maintenance_perform);
         if (!$maintenance_perform) {
             return redirect()->route('admin.maintenance-perform.index')->with('error', 'Maintenance Perform not found');
         }
+        $this->authorize('view', $maintenance_perform);
+       
         return view('maintenance_perform.show', compact('maintenance_perform'));
     }
 

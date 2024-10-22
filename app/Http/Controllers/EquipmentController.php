@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Events\AssignBatchRequest;
+use App\Events\AssignCalibrationBatchRequest;
 use App\Events\MaintenanceRequestCreated;
 use App\Http\Requests\AssignPatchEquipmentRequest;
 use App\Http\Requests\equipmentRequest;
 use App\Imports\EquipmentImport;
+use App\Models\CalibrationRequest;
 use App\Models\Department;
 use App\Models\Equipment;
 use App\Models\MaintenanceRequest;
 use App\Models\User;
 use App\Notifications\AssignBatchRequestNotify;
+use App\Notifications\AssignCalibrationBatchRequestNotify;
 use App\Notifications\MaintenanceRequestAssigned;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -210,6 +213,36 @@ class EquipmentController extends Controller
         event(new AssignBatchRequest($selected_equipment, $maintenanceRequest));
         return redirect()->back()->with('success', 'Maintenance requests Patch created successfully for the selected equipment.');
     }
+    public function assignCalibrationToUser(AssignPatchEquipmentRequest $request)
+    {
+
+        $assigned_to_id = $request->signed_to_id;
+        $selected_equipment = explode(',', $request->selected_items);
+        $batch_id = Str::uuid();
+
+        foreach ($selected_equipment as $equipment_id) {
+            // Create a new calibration request for each equipment
+            $calibrationRequest = new CalibrationRequest();
+            $calibrationRequest->equipment_id = $equipment_id; // Assign the equipment ID
+            $calibrationRequest->signed_to_id = $assigned_to_id; // Assign to the technician
+            $calibrationRequest->status = 'Pending'; // Set default status, e.g., pending
+            $calibrationRequest->requester_id = Auth::id(); // Requester's ID
+            $calibrationRequest->name = $request->name;
+            $calibrationRequest->type = $request->type;
+            $calibrationRequest->request_type = 'equipment';
+            $calibrationRequest->batch_id = $batch_id; // Unify by assigning the same batch ID
+
+            $calibrationRequest->save();
+        }
+        // Optionally, send notification to technician
+        $technician = User::find($assigned_to_id);
+        $technician->notify(new AssignCalibrationBatchRequestNotify($selected_equipment, $calibrationRequest));
+
+        // Fire an event for real-time notification (optional)
+        event(new AssignCalibrationBatchRequest($selected_equipment, $calibrationRequest));
+        return redirect()->back()->with('success', 'Calibration requests Patch created successfully for the selected equipment.');
+    }
+    
     public function ppm_equip(Request $request)
     {
         $type='ppm';

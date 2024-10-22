@@ -53,7 +53,13 @@
             Assign Selected Equipment to User
         </button>
         @endcan
-        <table id="equipment-table" class="table table-bordered table-striped">
+
+        @can('Admin-Manager')
+        <button type="button" class="btn btn-success mb-2" data-toggle="modal" data-target="#assignModalCalibration">
+            Assign Selected Equipment to User For Calibration
+        </button>
+        @endcan
+        <table id="maintenance-table" class="table table-bordered table-striped">
 
             <thead>
                 <tr>
@@ -206,6 +212,70 @@
         </div>
     </div>
 
+       <!-- Assign Calibration Modal -->
+       <div class="modal fade" id="assignModalCalibration" tabindex="-1" role="dialog" aria-labelledby="assignCalibrationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="assignCalibrationModalLabel">Assign Selected Items to User</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="assignCalibrationForm" method="POST" action="{{ route('admin.equipment.assignCalibration') }}">
+                    @csrf
+                    <div class="modal-body">
+                        <!-- Select User -->
+                        <div class="form-group">
+                            <label for="user_id">Select User <span class="text-danger">*</span></label>
+                            <select name="signed_to_id" id="user_id" class="form-control" required>
+                                <option value="">select User</option>
+                                @foreach($technicians as $user) <!-- Assuming $users is passed to the view -->
+                                <option value="{{ $user->id }}">{{ $user->email }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="user_id">Request Name <span class="text-danger">*</span></label>
+                            <input name="name" type="text" required id="name" class="form-control">
+
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="signed_to_id">Type <span class="text-danger">*</span></label>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="Inner" name="type" id="type1" required>
+                                <label class="form-check-label" for="flexRadioDefault1">
+                                    Inner
+                                </label>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="Outer" name="type" id="type2" required>
+                                <label class="form-check-label" for="flexRadioDefault2">
+                                    Outer
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="Warranty" name="type" id="type3" required>
+                                <label class="form-check-label" for="flexRadioDefault2">
+                                    Warranty
+                                </label>
+                            </div>
+
+                        </div>
+                        <!-- Hidden Input for Selected Maintenance Request IDs -->
+                        <input type="hidden" name="selected_items" id="selected_items_calibration">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Assign</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 @stop
@@ -221,7 +291,7 @@
 
 <script>
     $(document).ready(function() {
-        $('#equipment-table').DataTable();
+        $('#maintenance-table').DataTable();
 
         $('#select-all').on('click', function() {
             var isChecked = $(this).prop('checked');
@@ -249,6 +319,21 @@
 
             // Add the selected maintenance request IDs to the hidden input field
             $('#selected_items').val(selected.join(','));
+        
+
+            
+        });
+        $('#assignModalCalibration').on('show.bs.modal', function() {
+            var selected = [];
+            $('.row-checkbox:checked').each(function() {
+                selected.push($(this).val());
+            });
+
+            // Add the selected calibration request IDs to the hidden input field
+            
+            $('#selected_items_calibration').val(selected.join(','));
+
+            
         });
 
     });

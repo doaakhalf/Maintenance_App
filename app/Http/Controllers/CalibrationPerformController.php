@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\CalibrationPerformCreated;
+use App\Events\CalibrationPerformStatusChanged;
 use App\Http\Requests\CalibrationPerformRequest;
 use App\Models\CalibrationPerform;
 use App\Models\CalibrationPerformDetail;
@@ -10,6 +11,7 @@ use App\Models\CalibrationRequest;
 use App\Models\SparePart;
 use App\Models\User;
 use App\Notifications\CalibrationPerformReply;
+use App\Notifications\CalibrationPerformStatusChangedNotify;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -170,10 +172,11 @@ class CalibrationPerformController extends Controller
     {
         //
         $calibration_perform = CalibrationPerform::find($id);
-        $this->authorize('view', $calibration_perform);
         if (!$calibration_perform) {
             return redirect()->route('admin.calibration-perform.index')->with('error', 'Calibration Perform not found');
         }
+        $this->authorize('view', $calibration_perform);
+       
         return view('calibration_perform.show', compact('calibration_perform'));
     }
 

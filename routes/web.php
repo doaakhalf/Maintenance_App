@@ -90,6 +90,9 @@ Route::middleware(['auth', 'role:Admin,Manager,Technician'])->prefix('admin')->g
     ])->middleware(['auth', 'role:Admin,Manager']);;
     Route::post('/equipment/import', [App\Http\Controllers\EquipmentController::class, 'import'])->name('admin.equipment.import');
     Route::post('/equipment/assign', [App\Http\Controllers\EquipmentController::class, 'assignToUser'])->name('admin.equipment.assign');
+    Route::post('/equipment/assignCalibration', [App\Http\Controllers\EquipmentController::class, 'assignCalibrationToUser'])->name('admin.equipment.assignCalibration');
+    
+    
     
     Route::get('/equipment/ppm/all', [App\Http\Controllers\EquipmentController::class, 'ppm_equip'])->name('admin.equipment.ppm')->middleware(['auth', 'role:Admin,Manager']);
 
@@ -151,7 +154,8 @@ Route::middleware(['auth', 'role:Admin,Manager,Technician'])->prefix('admin')->g
     // Batch requests page
     Route::get('/calibration-request/{batch_id}/notification/list', [CalibrationRequestController::class, 'notification'])->name('admin.calibration_request.batch.list');
 
-
+    Route::get('/request/{batch_id}/notification/list', [MaintenanceRequestController::class, 'notification'])->name('admin.requests.batch.list');
+  
     // calibration Perform
     Route::get('/calibration-perform/{status?}', [CalibrationPerformController::class, 'index'])->name('admin.calibration-perform.index')
         ->middleware(['auth', 'role:Admin,Technician,Manager']);;

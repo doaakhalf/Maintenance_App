@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Events\AssignBatchRequest;
+use App\Events\AssignCalibrationBatchRequest;
 use App\Events\MaintenanceRequestCreated;
 use App\Http\Requests\AssignPatchEquipmentOfDepartmentRequest;
 use App\Http\Requests\DepartmentRequest;
+use App\Models\CalibrationRequest;
 use Illuminate\Http\Request;
 use App\Models\Department;
 use App\Models\MaintenanceRequest;
 use App\Models\User;
 use App\Notifications\AssignBatchRequestNotify;
+use App\Notifications\AssignCalibrationBatchRequestNotify;
 use App\Notifications\MaintenanceRequestAssigned;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
@@ -200,4 +203,45 @@ class DepartmentController extends Controller
     
 
     }
+    public function assignEquipmentOfDepToUserForCalibration(AssignPatchEquipmentOfDepartmentRequest $request,$department_id)
+    {
+      
+       $assigned_to_id=$request->signed_to_id;
+       $departement=Department::find($department_id);
+       $batch_id = Str::uuid();
+       if($departement){
+        $selected_equipment = $departement->equipments->pluck('id'); // This is an array of equipment IDs
+        foreach ($selected_equipment as $equipment_id) {
+            // Create a calibration request for each piece of equipment
+            $calibrationRequest=CalibrationRequest::create([
+                'equipment_id' => $equipment_id,
+                'signed_to_id' => $assigned_to_id,
+                'department_id' => $department_id,
+                'requester_id' => Auth::id(), // Assuming the requester is the current user
+                'status' => 'Pending', //
+                'type' => $request->type, // 
+                'name' => $request->name, // 
+                'request_type'=>"department",
+                'batch_id' => $batch_id // Unify by assigning the same batch ID
+           
+            ]);
+    
+            
+        }
+         // Optionally, send notification to technician
+     $technician = User::find($assigned_to_id);
+     $technician->notify(new AssignCalibrationBatchRequestNotify ($selected_equipment->toArray(),$calibrationRequest));
+
+     // Fire an event for real-time notification (optional)
+     dd(event(new AssignCalibrationBatchRequest($selected_equipment->toArray(),$calibrationRequest)));
+     return redirect()->back()->with('success', 'Equipment assigned successfully!');
+       }
+       else{
+        // not found
+        return redirect()->back()->with('error', 'Department not found!');
+       }
+    
+
+    }
+    
 }

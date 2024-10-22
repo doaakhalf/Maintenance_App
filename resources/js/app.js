@@ -6,9 +6,11 @@ import './bootstrap';
 
 // Reusable function to handle notifications
 function handleNotification(channel, eventClass, userId) {
+    console.log('channel:', channel,eventClass,userId);
     window.Echo.channel(channel + '.' + userId)
         .listen(eventClass, (data) => {
             console.log('Notification received:', data);
+           
 
             const notifications = document.getElementById('notifications');
             const notification = document.createElement('a');
@@ -55,6 +57,8 @@ handleNotification('calibration-request-change-status', '.CalibrationRequestStat
 handleNotification('calibration-perform-change-status', '.CalibrationPerformStatusChanged', userId);
 
 handleNotification('calibration-perform', '.CalibrationPerformCreated', userId);
+
+handleNotification('assign-batch-calibration-requests', '.AssignCalibrationBatchRequest', userId);
 
 
 

@@ -62,7 +62,7 @@ Broadcast::channel('calibration-perform-change-status.{id}', function ($user, $i
     
     return (int) $user->id === (int) $id;
 });
-// Broadcast::channel('assign-calibration-batch-maintenance-requests.{id}', function ($user, $id) {
+Broadcast::channel('assign-batch-calibration-requests.{id}', function ($user, $id) {
     
-//     return (int) $user->id === (int) $id;
-// });
+    return (int) $user->id === (int) $id;
+});
